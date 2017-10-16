@@ -1,13 +1,5 @@
-
-
 # ifndef __CPHSTL_INTEGER__
 #define __CPHSTL_INTEGER__
-
-
-
-
-
-
 
 #include <cassert> // assert macro
 #include <cmath> // std::log10
@@ -18,24 +10,15 @@
 #include <type_traits> // std type traits
 #include <utility> // std::move
 
-
 namespace unnamed {
-
 
 /* §0 */
 
-
 // metaprogramming aids
-
-
-
 
 template<typename... Typepack>
 class typelist {
 };
-
-
-
 
 template<bool B, typename T, typename F>
 class if_mp {
@@ -43,11 +26,7 @@ public :
 
 using type = T;
 
-
 };
-
-
-
 
 template<typename T, typename F>
 class if_mp< false , T, F> {
@@ -58,13 +37,8 @@ using type = F;
 
 };
 
-
-
 template<std::size_t, typename L>
 class find_first_mp;
-
-
-
 
 template<std::size_t b, template<typename...> class L>
 class find_first_mp< b, L<>> {
@@ -72,12 +46,9 @@ public :
 
 using type = void;
 
-
 };
 
-
 template<std::size_t b, template<typename...> class L, typename
-
 
 Head, typename... Tail>
 class find_first_mp< b, L<Head, Tail...>> {
@@ -87,239 +58,143 @@ using byte = unsigned char;
 static constexpr std::size_t bits_per_byte = std::numeric_limits
 <byte>::digits;
 using rest = L<Tail... > ;
-using type = typename std::conditional<b ≤ bits_per_byte *
+using type = typename std::conditional<b <= bits_per_byte *
 sizeof(Head) , Head, typename unnamed::find_first_mp< b, rest
 >::type>::type;
 
-
-
-
-
 };
-
 
 /*
 This class has
 integer kernel
 realized using
 class given as
-
-
-
-
-
 no data members. It can be used as the base of an
-to make the kernel smaller. All operations are
+to make the kernel smaller.All operations are
 the member functions available in the derived
 a template argument.
 */
-
-
-
 
 template<typename K>
 class full_interface {
 private :
 
-
-
 using kernel_type = K;
 using self_type = full_interface<K> ;
-
-
-
 
 constexpr K const* down_cast(self_type const* const base_pointer)
 const {
 return static cast <K const* > (base_pointer) ;
 }
 
-
-
-
 constexpr K* down_cast(self_type* const base_pointer) const {
 return static cast <K* > (base_pointer) ;
 }
 
-
 public :
 
-
 // comparison operators
-
-
-
 
 bool operator> (K const& other) const {
 return other < *down_cast(this) ;
 }
 
-
-
-
 bool operator !=(K const& other) const {
 return not (*down_cast(this) == other) ;
 }
 
-
-
-
-
-bool operator≤(K const& other) const {
+bool operator<=(K const& other) const {
 return not (other < *down_cast(this) ) ;
 }
 
-
-
-bool operator≥(K const& other) const {
+bool operator>=(K const& other) const {
 return not (*down_cast(this) < other) ;
 }
 
-
 // unary operators
 
-
-
-
-
-K operator−( ) const {
+K operator-( ) const {
 K v = *down_cast(this) ;
 return compl v + K() ;
 }
-
-
-
 
 K operator+( ) const {
 return *down_cast(this) ;
 }
 
-
-
-
-
-K& operator++( ) { // pre−increment
+K& operator++( ) { // pre-increment
 *down_cast(this) = *down_cast(this) + K() ;
 return *down_cast(this) ;
 }
 
-
-
-
-
-
-K operator++(int) { // post−increment
+K operator++(int) { // post-increment
 K current(*down_cast(this) ) ;
 operator++( ) ;
 return current;
 }
 
-
-
-
-
-K& operator−−( ) { // pre−decrement
-*down_cast(this) = *down_cast(this) − K() ;
-return *down_cast(this) ;
+K& operator--( ) { // pre-decrement
+	*down_cast(this) = *down_cast(this) - K() ;
+	return *down_cast(this) ;
 }
 
-
-
-
-
-
-K operator−−(int) { // post−decrement
+K operator--(int) { // post-decrement
 K current(*down_cast(this) ) ;
-operator−−( ) ;
+operator--( ) ;
 return current;
 }
 
-
 // binary operators
 
-
-
-
-K operator−(K const& other) const {
-return *down_cast(this) + (− other) ;
+K operator-(K const& other) const {
+return *down_cast(this) + (- other) ;
 }
 
-
 // compound assignments
-
-
-
-
 
 K& operator += (K const& other) {
 *down_cast(this) = *down_cast(this) + other;
 return *down_cast(this) ;
 }
 
-
-
-K& operator −= (K const& other) {
-*down_cast(this) = *down_cast(this) − other;
+K& operator -= (K const& other) {
+*down_cast(this) = *down_cast(this) - other;
 return *down_cast(this) ;
-
 }
-
 
 K& operator*=(K const& other) {
 *down_cast(this) = *down_cast(this) * other;
 return *down_cast(this) ;
 }
 
-
-
-
-
 K& operator/ =(K const& other) {
 *down_cast(this) = *down_cast(this) / other;
 return *down_cast(this) ;
 }
-
-
-
-
 
 K& operator%=(K const& other) {
 *down_cast(this) = *down_cast(this) % other;
 return *down_cast(this) ;
 }
 
-
-
-
-
 K& operator&=(K const& other) {
 *down_cast(this) = *down_cast(this) & other;
 return *down_cast(this) ;
 }
-
-
-
-
 
 K& operator|=(K const& other) {
 *down_cast(this) = *down_cast(this) | other;
 return *down_cast(this) ;
 }
 
-
-
-
-
-K& operatorˆ =(K const& other) {
-*down_cast(this) = *down_cast(this) ˆ other;
+K& operator^ =(K const& other) {
+*down_cast(this) = *down_cast(this) ^ other;
 return *down_cast(this) ;
 }
 
-
 // bitwise operators
 
-
-K operator∼ ( ) const {
+K operator~ ( ) const {
 K copy = *down_cast(this) ;
 using I = typename K::iterator;
 for (I i = copy.begin( ) ; i != copy.end( ) ; ++i) {
@@ -340,8 +215,8 @@ class plain_natural : public unnamed::full_interface<plain_natural<b>> {
 
 static constexpr std::size_t max_width = std::numeric_limits<
 unsigned long long>::digits;
-static_assert(b != 0 , ”b must be larger than 0”) ;
-static_assert(b ≤ max_width, ”b too large for this type”) ;
+static_assert(b != 0 , "b must be larger than 0") ;
+static_assert(b <= max_width, "b too large for this type") ;
 
 private :
 
@@ -352,7 +227,7 @@ using T = typename unnamed::find_first_mp< b, unsigned_types>::type;
 T a;
 
 static constexpr T complement(T c) noexcept {
-return ∼ c;
+return ~ c;
 }
 
 public :
@@ -450,16 +325,16 @@ return std::to_string(a) ;
 // comparison operators
 
 bool operator ==(plain_natural<b> const& other) const {
-return a == other. a;
+return a == other.a;
 }
 
 bool operator< (plain_natural<b> const& other) const {
-return a < other. a;
+return a < other.a;
 }
 
 // unary operators
 
-plain_natural<b> operator∼ ( ) const {
+plain_natural<b> operator~ ( ) const {
 T copy = a;
 copy = compl copy;
 return plain_natural<b> (copy) ;
@@ -468,35 +343,35 @@ return plain_natural<b> (copy) ;
 // binary operators
 
 plain_natural<b> operator+(plain_natural<b> const& other) {
-return plain_natural<b> (a + other. a) ;
+return plain_natural<b> (a + other.a) ;
 }
 
 plain_natural<b> operator*(plain_natural<b> const& other) {
-return plain_natural<b> (a * other. a) ;
+return plain_natural<b> (a * other.a) ;
 }
 
 plain_natural<b> operator/(plain_natural<b> const& other) {
-return plain_natural<b> (a / other. a) ;
+return plain_natural<b> (a / other.a) ;
 }
 
 plain_natural<b> operator% (plain_natural<b> const& other) {
-return plain_natural<b> (a % other. a) ;
+return plain_natural<b> (a % other.a) ;
 }
 
 // bitwise operators
 
 plain_natural<b> operator& (plain_natural<b> const& other) {
-T tmp = a bitand other. a;
+T tmp = a bitand other.a;
 return plain_natural<b> (tmp) ;
 }
 
 plain_natural<b> operator| (plain_natural<b> const& other) {
-T tmp = a bitor other. a;
+T tmp = a bitor other.a;
 return plain_natural<b> (tmp) ;
 }
 
-plain_natural<b> operatorˆ(plain_natural<b> const& other) {
-T tmp = a xor other. a;
+plain_natural<b> operator^(plain_natural<b> const& other) {
+T tmp = a xor other.a;
 return plain_natural<b> (a) ;
 }
 
@@ -520,8 +395,8 @@ class plain_integer
 
 static constexpr std::size_t max_width = std::numeric_limits<
 unsigned long long>::digits;
-static_assert(b != 0 , ”b must be larger than 0”) ;
-static_assert(b ≤ max_width, ”b too large for this type”) ;
+static_assert(b != 0 , "b must be larger than 0") ;
+static_assert(b <= max_width, "b too large for this type") ;
 
 private :
 
@@ -544,7 +419,7 @@ using const_iterator = T const*;
 
 // constants
 
-static constexpr size_type digits = b − 1;
+static constexpr size_type digits = b - 1;
 static constexpr bool is_signed = true;
 static constexpr bool is_integer = true;
 static constexpr bool is_exact = true;
@@ -557,7 +432,7 @@ return cphstl::plain_integer<b> (1) << digits;
 }
 
 static constexpr cphstl::plain_integer<b> max( ) noexcept {
-return ∼ min( ) ;
+return ~ min( ) ;
 }
 
 // iterators
@@ -627,18 +502,18 @@ return std::to_string(a) ;
 // comparison operators
 
 bool operator ==(plain_integer<b> const& other) const {
-return a == other. a;
+return a == other.a;
 }
 
 bool operator< (plain_integer<b> const& other) const {
-return a < other. a;
+return a < other.a;
 }
 
 // unary operators
 
-plain_integer<b> operator∼ ( ) const {
+plain_integer<b> operator~ ( ) const {
 plain_integer<b> copy = *this ;
-copy. a = compl copy. a;
+copy.a = compl copy.a;
 return copy;
 }
 
@@ -646,22 +521,22 @@ return copy;
 
 plain_integer<b> operator+(plain_integer<b> const& other)
 const {
-return plain_integer<b> (a + other. a) ;
+return plain_integer<b> (a + other.a) ;
 }
 
-plain_integer<b> operator−(plain_integer<b> const& other)
+plain_integer<b> operator-(plain_integer<b> const& other)
 const {
-return plain_integer<b> (a − other. a) ;
+return plain_integer<b> (a - other.a) ;
 }
 
 plain_integer<b> operator*(plain_integer<b> const& other)
 const {
-return plain_integer<b> (a * other. a) ;
+return plain_integer<b> (a * other.a) ;
 }
 
 plain_integer<b> operator/(plain_integer<b> const& other)
 const {
-return plain_integer<b> (a / other. a) ;
+return plain_integer<b> (a / other.a) ;
 }
 
 template<typename Integer>
@@ -692,7 +567,7 @@ using T= long long;
 using U= unsigned long long;
 
 static constexpr std::size_t word_size= std::numeric_limits<U>::digits;
-static constexpr std::size_t n= (b + word_size − 1) / word_size;
+static constexpr std::size_t n= (b + word_size - 1) / word_size;
 
 // data: an array
 
@@ -724,7 +599,7 @@ return cphstl::multi_word_integer<b> ( ) ;
 }
 
 static constexpr cphstl::multi_word_integer<b> max( ) noexcept {
-return ∼ cphstl::multi_word_integer<b> ( ) ;
+return ~ cphstl::multi_word_integer<b> ( ) ;
 }
 
 // iterators
@@ -790,16 +665,16 @@ default ;
 std::string to_string( ) const {
 auto i = n;
 std::string output;
-output += ”(” ;
+output += "(" ;
 while(true) {
-−−i;
+--i;
 output += std::to_string(a[i] ) ;
 if (i == 0) {
 break;
 }
-output += ” , ” ;
+output += " , " ;
 } while (i != 0) ;
-output += ”)” ;
+output += ")" ;
 return output;
 }
 
@@ -807,7 +682,7 @@ return output;
 
 bool operator ==(multi_word_natural<b> const& other) const {
 for (auto i= 0; i != n; ++i) {
-if (a[i] != other. a[i] ) {
+if (a[i] != other.a[i] ) {
 return false ;
 }
 }
@@ -815,21 +690,19 @@ return true;
 }
 
 bool operator< (multi_word_natural<b> const& other) const {
-auto i = n − 1;
-while (i != 0 and a[i] == other. a[i] ) {
-−−i;
+auto i = n - 1;
+while (i != 0 and a[i] == other.a[i] ) {
+--i;
 }
-return a[i] < other. a[i ] ;
+return a[i] < other.a[i] ;
 }
 
 // unary operators
 
-multi_word_natural<b> operator∼ ( ) const {
+multi_word_natural<b> operator~ ( ) const {
 multi_word_natural<b> copy= *this ;
-for (auto i= 0; i =
-=
-= n; ++i) {
-copy. a[i]= compl copy. a[i ] ;
+for (auto i= 0; i != n; ++i) {
+copy.a[i]= compl copy.a[i] ;
 }
 return copy;
 }
@@ -839,9 +712,9 @@ return copy;
 multi_word_natural<b> operator+(multi_word_natural<b> const&
 other) {
 // Does not work: carry not handled correctly
-T result[n ] ;
+T result[n] ;
 for (auto i= 0; i != n; ++i) {
-T carry= __builtin_add_overflow(a[i] , other. a[i] , &result[i] ) ;
+T carry= __builtin_add_overflow(a[i] , other.a[i] , &result[i] ) ;
 result[i] += carry;
 }
 return multi_word_natural<b> (result) ;
@@ -888,11 +761,11 @@ using T= long long;
 using U= unsigned long long;
 
 static constexpr std::size_t word_size= std::numeric_limits<U>::digits;
-static constexpr std::size_t n= (b + word_size − 1) / word_size;
+static constexpr std::size_t n= (b + word_size - 1) / word_size;
 
 // data: an array
 
-T a[n ] ;
+T a[n] ;
 
 public :
 
@@ -906,7 +779,7 @@ using const_iterator= T const*;
 
 // constants
 
-static constexpr size_type digits= b − 1;
+static constexpr size_type digits= b - 1;
 static constexpr bool is_signed= true;
 static constexpr bool is_integer= true;
 static constexpr bool is_exact= true;
@@ -919,7 +792,7 @@ return cphstl::multi_word_integer<b> (1) << digits;
 }
 
 static constexpr cphstl::multi_word_integer<b> max( ) noexcept {
-return ∼ min( ) ;
+return ~ min( ) ;
 }
 
 // iterators
@@ -986,16 +859,16 @@ default ;
 std::string to_string( ) const {
 auto i= n;
 std::string output;
-output += ”(” ;
+output += "(" ;
 while(true) {
-−−i;
+--i;
 output += std::to_string(a[i] ) ;
 if (i == 0) {
 break;
 }
-output += ” , ” ;
+output += " , " ;
 } while (i != 0) ;
-output += ”)” ;
+output += ")" ;
 return output;
 }
 
@@ -1003,7 +876,7 @@ return output;
 
 bool operator ==(multi_word_integer<b> const& other) const {
 for (auto i= 0; i != n; ++i) {
-if (a[i] != other. a[i] ) {
+if (a[i] != other.a[i] ) {
 return false ;
 }
 }
@@ -1011,19 +884,19 @@ return true;
 }
 
 bool operator< (multi_word_integer<b> const& other) const {
-auto i= n − 1;
-while (i != 0 and a[i] == other. a[i] ) {
-−−i;
+auto i= n - 1;
+while (i != 0 and a[i] == other.a[i] ) {
+--i;
 }
-return a[i] < other.a[i ] ;
+return a[i] < other.a[i] ;
 }
 
 // unary operators
 
-multi_word_integer<b> operator∼ ( ) const {
+multi_word_integer<b> operator~ ( ) const {
 multi_word_integer<b> copy= *this ;
 for (auto i= 0; i != n; ++i) {
-copy. a[i]= compl copy. a[i ] ;
+copy.a[i]= compl copy.a[i] ;
 }
 return copy;
 }
@@ -1032,9 +905,9 @@ return copy;
 
 multi_word_integer<b> operator+(multi_word_integer<b> const&
 other) {
-T result[n ] ;
+T result[n] ;
 for (auto i= 0; i != n; ++i) {
-T carry= __builtin_add_overflow(a[i] , other. a[i] , &result[i] ) ;
+T carry= __builtin_add_overflow(a[i] , other.a[i] , &result[i] ) ;
 result[i] += carry;
 }
 return multi_word_integer<b> (result) ;
@@ -1068,3 +941,5 @@ template<std::size_t b>
 std::ostream& operator<<(std::ostream &os, cphstl::
 multi_word_integer<b> const& number) {
 return os << number.to_string( ) ;
+
+#endif

@@ -1,4 +1,3 @@
-
 #include <typeinfo>
 #include "integer.h++"
 
@@ -8,12 +7,12 @@ using namespace cphstl;
 multi_word_integer<64> x = 3;
 multi_word_integer<64> y = 5;
 multi_word_integer<64> z = x + y;
-y = z − x;
-std::cout << x << ” ” << y << ” ” << z << ”\n” ;
+y = z - x;
+std::cout << x << " " << y << " " << z << "\n" ;
 Z<3> t{3};
 Z<3> u;
-u = u − t;
-if(u != −t) {
+u = u - t;
+if(u != -t) {
 assert( false ) ;
 }
 /*
