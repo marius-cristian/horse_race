@@ -19,9 +19,18 @@
  *
  */
 
-#include <iostream.h>
-#include <iomanip.h>
-#include <math.h>
+/*
+ *  Corrected to compile with gcc --version
+ *                            gcc (Ubuntu 5.4.0-6ubuntu1~16.04.4) 5.4.0 20160609
+ *  2017-10-16
+ *
+ *  Marius-Florin Cristian
+ *
+*/ 
+
+#include <iostream>
+#include <iomanip>
+#include <cmath>
 #include <float.h>
 
 /*****************************************************************************
@@ -185,25 +194,25 @@ public:
 template<unsigned N>
 class bitNum {
 public:
-    enum _b { nbits = 0 };
+   enum _b { nbits = 0 };
 };
 
-class bitNum<1U>     { public: enum _b { nbits = 16    }; };
-class bitNum<2U>     { public: enum _b { nbits = 15    }; };
-class bitNum<4U>     { public: enum _b { nbits = 14    }; };
-class bitNum<8U>     { public: enum _b { nbits = 13    }; };
-class bitNum<16U>    { public: enum _b { nbits = 12    }; };
-class bitNum<32U>    { public: enum _b { nbits = 11    }; };
-class bitNum<64U>    { public: enum _b { nbits = 10    }; };
-class bitNum<128U>   { public: enum _b { nbits = 9     }; };
-class bitNum<256U>   { public: enum _b { nbits = 8     }; };
-class bitNum<512U>   { public: enum _b { nbits = 7     }; };
-class bitNum<1024U>  { public: enum _b { nbits = 6     }; };
-class bitNum<2048U>  { public: enum _b { nbits = 5     }; };
-class bitNum<4096U>  { public: enum _b { nbits = 4     }; };
-class bitNum<8192U>  { public: enum _b { nbits = 3     }; };
-class bitNum<16384U> { public: enum _b { nbits = 2     }; };
-class bitNum<32768U> { public: enum _b { nbits = 1     }; };
+template<>class bitNum<1U>     { public: enum _b { nbits = 16    }; };
+template<>class bitNum<2U>     { public: enum _b { nbits = 15    }; };
+template<>class bitNum<4U>     { public: enum _b { nbits = 14    }; };
+template<>class bitNum<8U>     { public: enum _b { nbits = 13    }; };
+template<>class bitNum<16U>    { public: enum _b { nbits = 12    }; };
+template<>class bitNum<32U>    { public: enum _b { nbits = 11    }; };
+template<>class bitNum<64U>    { public: enum _b { nbits = 10    }; };
+template<>class bitNum<128U>   { public: enum _b { nbits = 9     }; };
+template<>class bitNum<256U>   { public: enum _b { nbits = 8     }; };
+template<>class bitNum<512U>   { public: enum _b { nbits = 7     }; };
+template<>class bitNum<1024U>  { public: enum _b { nbits = 6     }; };
+template<>class bitNum<2048U>  { public: enum _b { nbits = 5     }; };
+template<>class bitNum<4096U>  { public: enum _b { nbits = 4     }; };
+template<>class bitNum<8192U>  { public: enum _b { nbits = 3     }; };
+template<>class bitNum<16384U> { public: enum _b { nbits = 2     }; };
+template<>class bitNum<32768U> { public: enum _b { nbits = 1     }; };
 
 /*
  * reverseBits<N,I>::reverse is the number I with the order of its bits
@@ -249,7 +258,7 @@ public:
     }
 };
 
-class FFTSwap2<0U,0U> {
+template<>class FFTSwap2<0U,0U> {
 public:
     static inline void swap(float* array)
     { }
@@ -287,7 +296,7 @@ public:
 };
 
 // Base case to terminate the recursive loop
-class FFTReorder<0U,0U> {
+template<>class FFTReorder<0U,0U> {
 public:
     static inline void reorder(float* array)
     { }
@@ -308,7 +317,7 @@ public:
     }
 };
 
-class FFTCalcTempR<1U> {
+template<>class FFTCalcTempR<1U> {
 public:
     static inline float tempr(const float& wr, const float& wi, float* array,
         const int j)
@@ -329,7 +338,7 @@ public:
     }
 };
 
-class FFTCalcTempI<1U> {
+template<>class FFTCalcTempI<1U> {
 public:
     static inline float tempi(const float& wr, const float& wi, float* array,
         const int j)
@@ -369,7 +378,7 @@ public:
 };
 
 // Specialization to provide base case for loop recursion
-class FFTInnerLoop<0U,0U,0U,0U> {
+template<>class FFTInnerLoop<0U,0U,0U,0U> {
 public:
     static inline void loop(const float& wr, const float& wi, float* array)
     { }
@@ -403,7 +412,7 @@ public:
 };
 
 // Specialization for base case to terminate recursive loop
-class FFTMLoop<0U,0U,0U> {
+template<>class FFTMLoop<0U,0U,0U> {
 public:
     static inline void loop(float* array)
     { }
@@ -430,7 +439,7 @@ public:
 };
 
 // Specialization for base case to terminate recursive loop
-class FFTOuterLoop<0U,0U> {
+template<>class FFTOuterLoop<0U,0U> {
 public:
     static inline void loop(float* array)
     { }
@@ -482,11 +491,11 @@ int main()
     FFTServer<N>::FFT(data-1);       // Original four1() used arrays starting
                                      // at 1 instead of 0
 
-    cout << "Transformed data:" << endl;
+    std::cout << "Transformed data:" << std::endl;
     
     for (i=0; i < N; ++i)
-        cout << setw(10) << setprecision(5) << data[2*i] << "\t"
-             << data[2*i+1] << "I" << endl;
+        std::cout << std::setw(10) << std::setprecision(5) << data[2*i] << "\t"
+             << data[2*i+1] << "I" << std::endl;
 
     return 0;
 }
