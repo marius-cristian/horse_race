@@ -1,3 +1,5 @@
+//g++ biginteger.cpp -std=c++17 -o biginteger
+
 # ifndef __CPHSTL_INTEGER__
 #define __CPHSTL_INTEGER__
 
@@ -84,11 +86,11 @@ using self_type = full_interface<K> ;
 
 constexpr K const* down_cast(self_type const* const base_pointer)
 const {
-return static cast <K const* > (base_pointer) ;
+return static_cast <K const* > (base_pointer) ;
 }
 
 constexpr K* down_cast(self_type* const base_pointer) const {
-return static cast <K* > (base_pointer) ;
+return static_cast <K* > (base_pointer) ;
 }
 
 public :
@@ -167,7 +169,7 @@ K& operator*=(K const& other) {
 return *down_cast(this) ;
 }
 
-K& operator/ =(K const& other) {
+K& operator /=(K const& other) {
 *down_cast(this) = *down_cast(this) / other;
 return *down_cast(this) ;
 }
@@ -187,7 +189,7 @@ K& operator|=(K const& other) {
 return *down_cast(this) ;
 }
 
-K& operator^ =(K const& other) {
+K& operator^=(K const& other) {
 *down_cast(this) = *down_cast(this) ^ other;
 return *down_cast(this) ;
 }
