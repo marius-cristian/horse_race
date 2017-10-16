@@ -87,7 +87,7 @@ using byte = unsigned char;
 static constexpr std::size_t bits_per_byte = std::numeric_limits
 <byte>::digits;
 using rest = L<Tail... > ;
-using type = typename std::conditional<b ≤ bits_per_byte ∗
+using type = typename std::conditional<b ≤ bits_per_byte *
 sizeof(Head) , Head, typename unnamed::find_first_mp< b, rest
 >::type>::type;
 
@@ -129,16 +129,16 @@ using self_type = full_interface<K> ;
 
 
 
-constexpr K const∗ down_cast(self_type const∗ const base_pointer)
+constexpr K const* down_cast(self_type const* const base_pointer)
 const {
-return static cast <K const∗ > (base_pointer) ;
+return static cast <K const* > (base_pointer) ;
 }
 
 
 
 
-constexpr K∗ down_cast(self_type∗ const base_pointer) const {
-return static cast <K∗ > (base_pointer) ;
+constexpr K* down_cast(self_type* const base_pointer) const {
+return static cast <K* > (base_pointer) ;
 }
 
 
@@ -151,14 +151,14 @@ public :
 
 
 bool operator> (K const& other) const {
-return other < ∗down_cast(this) ;
+return other < *down_cast(this) ;
 }
 
 
 
 
 bool operator !=(K const& other) const {
-return not (∗down_cast(this) == other) ;
+return not (*down_cast(this) == other) ;
 }
 
 
@@ -166,13 +166,13 @@ return not (∗down_cast(this) == other) ;
 
 
 bool operator≤(K const& other) const {
-return not (other < ∗down_cast(this) ) ;
+return not (other < *down_cast(this) ) ;
 }
 
 
 
 bool operator≥(K const& other) const {
-return not (∗down_cast(this) < other) ;
+return not (*down_cast(this) < other) ;
 }
 
 
@@ -183,7 +183,7 @@ return not (∗down_cast(this) < other) ;
 
 
 K operator−( ) const {
-K v = ∗down_cast(this) ;
+K v = *down_cast(this) ;
 return compl v + K() ;
 }
 
@@ -191,7 +191,7 @@ return compl v + K() ;
 
 
 K operator+( ) const {
-return ∗down_cast(this) ;
+return *down_cast(this) ;
 }
 
 
@@ -199,8 +199,8 @@ return ∗down_cast(this) ;
 
 
 K& operator++( ) { // pre−increment
-∗down_cast(this) = ∗down_cast(this) + K() ;
-return ∗down_cast(this) ;
+*down_cast(this) = *down_cast(this) + K() ;
+return *down_cast(this) ;
 }
 
 
@@ -209,7 +209,7 @@ return ∗down_cast(this) ;
 
 
 K operator++(int) { // post−increment
-K current(∗down_cast(this) ) ;
+K current(*down_cast(this) ) ;
 operator++( ) ;
 return current;
 }
@@ -219,8 +219,8 @@ return current;
 
 
 K& operator−−( ) { // pre−decrement
-∗down_cast(this) = ∗down_cast(this) − K() ;
-return ∗down_cast(this) ;
+*down_cast(this) = *down_cast(this) − K() ;
+return *down_cast(this) ;
 }
 
 
@@ -229,7 +229,7 @@ return ∗down_cast(this) ;
 
 
 K operator−−(int) { // post−decrement
-K current(∗down_cast(this) ) ;
+K current(*down_cast(this) ) ;
 operator−−( ) ;
 return current;
 }
@@ -241,7 +241,7 @@ return current;
 
 
 K operator−(K const& other) const {
-return ∗down_cast(this) + (− other) ;
+return *down_cast(this) + (− other) ;
 }
 
 
@@ -252,22 +252,22 @@ return ∗down_cast(this) + (− other) ;
 
 
 K& operator += (K const& other) {
-∗down_cast(this) = ∗down_cast(this) + other;
-return ∗down_cast(this) ;
+*down_cast(this) = *down_cast(this) + other;
+return *down_cast(this) ;
 }
 
 
 
 K& operator −= (K const& other) {
-∗down_cast(this) = ∗down_cast(this) − other;
-return ∗down_cast(this) ;
+*down_cast(this) = *down_cast(this) − other;
+return *down_cast(this) ;
 
 }
 
 
-K& operator∗=(K const& other) {
-∗down_cast(this) = ∗down_cast(this) ∗ other;
-return ∗down_cast(this) ;
+K& operator*=(K const& other) {
+*down_cast(this) = *down_cast(this) * other;
+return *down_cast(this) ;
 }
 
 
@@ -275,8 +275,8 @@ return ∗down_cast(this) ;
 
 
 K& operator/ =(K const& other) {
-∗down_cast(this) = ∗down_cast(this) / other;
-return ∗down_cast(this) ;
+*down_cast(this) = *down_cast(this) / other;
+return *down_cast(this) ;
 }
 
 
@@ -284,8 +284,8 @@ return ∗down_cast(this) ;
 
 
 K& operator%=(K const& other) {
-∗down_cast(this) = ∗down_cast(this) % other;
-return ∗down_cast(this) ;
+*down_cast(this) = *down_cast(this) % other;
+return *down_cast(this) ;
 }
 
 
@@ -293,8 +293,8 @@ return ∗down_cast(this) ;
 
 
 K& operator&=(K const& other) {
-∗down_cast(this) = ∗down_cast(this) & other;
-return ∗down_cast(this) ;
+*down_cast(this) = *down_cast(this) & other;
+return *down_cast(this) ;
 }
 
 
@@ -302,8 +302,8 @@ return ∗down_cast(this) ;
 
 
 K& operator|=(K const& other) {
-∗down_cast(this) = ∗down_cast(this) | other;
-return ∗down_cast(this) ;
+*down_cast(this) = *down_cast(this) | other;
+return *down_cast(this) ;
 }
 
 
@@ -311,8 +311,8 @@ return ∗down_cast(this) ;
 
 
 K& operatorˆ =(K const& other) {
-∗down_cast(this) = ∗down_cast(this) ˆ other;
-return ∗down_cast(this) ;
+*down_cast(this) = *down_cast(this) ˆ other;
+return *down_cast(this) ;
 }
 
 
@@ -320,10 +320,10 @@ return ∗down_cast(this) ;
 
 
 K operator∼ ( ) const {
-K copy = ∗down_cast(this) ;
+K copy = *down_cast(this) ;
 using I = typename K::iterator;
 for (I i = copy.begin( ) ; i != copy.end( ) ; ++i) {
-∗i = compl ∗i;
+*i = compl *i;
 }
 return copy;
 }
@@ -362,8 +362,8 @@ public :
 using self_type = plain_natural<b> ;
 using word_type = T;
 using size_type = std::size_t;
-using iterator = T∗;
-using const_iterator = T const∗;
+using iterator = T*;
+using const_iterator = T const*;
 
 // constants
 
@@ -433,7 +433,7 @@ template<typename Integer>
 plain_natural<b> & operator =(Integer const& value) {
 // Does not work; cut the extra bits away
 a = T(value) ;
-return ∗this ;
+return *this ;
 }
 
 plain_natural<b> & operator =(plain_natural<b> const& ) =
@@ -471,8 +471,8 @@ plain_natural<b> operator+(plain_natural<b> const& other) {
 return plain_natural<b> (a + other. a) ;
 }
 
-plain_natural<b> operator∗(plain_natural<b> const& other) {
-return plain_natural<b> (a ∗ other. a) ;
+plain_natural<b> operator*(plain_natural<b> const& other) {
+return plain_natural<b> (a * other. a) ;
 }
 
 plain_natural<b> operator/(plain_natural<b> const& other) {
@@ -539,8 +539,8 @@ public :
 using self_type = plain_integer<b> ;
 using word_type = T;
 using size_type = std::size_t;
-using iterator = T∗;
-using const_iterator = T const∗;
+using iterator = T*;
+using const_iterator = T const*;
 
 // constants
 
@@ -610,7 +610,7 @@ template<typename Integer>
 plain_integer<b> & operator =(Integer const& value) {
 // Does not work! Cut the extra
 a = T(value) ;
-return ∗this ;
+return *this ;
 }
 
 plain_integer<b> & operator =(plain_integer<b> const& ) =
@@ -637,7 +637,7 @@ return a < other. a;
 // unary operators
 
 plain_integer<b> operator∼ ( ) const {
-plain_integer<b> copy = ∗this ;
+plain_integer<b> copy = *this ;
 copy. a = compl copy. a;
 return copy;
 }
@@ -654,9 +654,9 @@ const {
 return plain_integer<b> (a − other. a) ;
 }
 
-plain_integer<b> operator∗(plain_integer<b> const& other)
+plain_integer<b> operator*(plain_integer<b> const& other)
 const {
-return plain_integer<b> (a ∗ other. a) ;
+return plain_integer<b> (a * other. a) ;
 }
 
 plain_integer<b> operator/(plain_integer<b> const& other)
@@ -706,8 +706,8 @@ public :
 using self_type= multi_word_natural<b> ;
 using word_type= T;
 using size_type= std::size_t;
-using iterator= T∗;
-using const_iterator= T const∗;
+using iterator= T*;
+using const_iterator= T const*;
 
 // constants
 
@@ -775,8 +775,8 @@ multi_word_natural(multi_word_natural<b>&&)= default ;
 template<typename Integer>
 multi_word_natural<b> & operator=(Integer const& value) {
 // Does not work! Cut the extra
-∗a= T(value) ;
-return ∗this ;
+*a= T(value) ;
+return *this ;
 }
 
 multi_word_natural<b> & operator=(multi_word_natural<b> const
@@ -825,7 +825,7 @@ return a[i] < other. a[i ] ;
 // unary operators
 
 multi_word_natural<b> operator∼ ( ) const {
-multi_word_natural<b> copy= ∗this ;
+multi_word_natural<b> copy= *this ;
 for (auto i= 0; i =
 =
 = n; ++i) {
@@ -847,7 +847,7 @@ result[i] += carry;
 return multi_word_natural<b> (result) ;
 }
 
-multi_word_natural<b> operator∗(multi_word_natural<b> const&
+multi_word_natural<b> operator*(multi_word_natural<b> const&
 other) {
 return multi_word_natural<b> (other) ;
 }
@@ -901,8 +901,8 @@ public :
 using self_type= multi_word_integer<b> ;
 using word_type= T;
 using size_type= std::size_t;
-using iterator= T∗;
-using const_iterator= T const∗;
+using iterator= T*;
+using const_iterator= T const*;
 
 // constants
 
@@ -971,8 +971,8 @@ multi_word_integer(multi_word_integer<b>&&)= default ;
 template<typename Integer>
 multi_word_integer<b> & operator=(Integer const& value) {
 // Does not work! Cut the extra
-∗a= T(value) ;
-return ∗this ;
+*a= T(value) ;
+return *this ;
 }
 
 multi_word_integer<b> & operator=(multi_word_integer<b> const
@@ -1021,7 +1021,7 @@ return a[i] < other.a[i ] ;
 // unary operators
 
 multi_word_integer<b> operator∼ ( ) const {
-multi_word_integer<b> copy= ∗this ;
+multi_word_integer<b> copy= *this ;
 for (auto i= 0; i != n; ++i) {
 copy. a[i]= compl copy. a[i ] ;
 }
@@ -1040,7 +1040,7 @@ result[i] += carry;
 return multi_word_integer<b> (result) ;
 }
 
-multi_word_integer<b> operator∗(multi_word_integer<b> const&
+multi_word_integer<b> operator*(multi_word_integer<b> const&
 other) {
 return multi_word_integer<b> (other) ;
 }
