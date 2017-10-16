@@ -1,5 +1,5 @@
 #g++ -o3 -lm fft.cpp
-#gcc bigint.cpp -std=c++17 -o bigint
+#g++ biginteger.cpp -std=c++17 -lm -o bigint
 CXX=g++
 CXXFLAGS=-O3 -std=c++17 -Wall -Wextra -DNDEBUG
 
