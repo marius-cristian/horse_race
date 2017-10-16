@@ -1,0 +1,15 @@
+
+
+Large integer multiplication
+
+// Keep track if the numbers fit in memory.
+
+Naive
+
+Karatsuba
+
+Strassen
+
+Martin Fuller
+
+Libraries: https://www.bouncycastle.org/
