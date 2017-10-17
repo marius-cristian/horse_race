@@ -46,7 +46,7 @@
  * template classes.
  ****************************************************************************/
 
-//namespace FFT{
+namespace FFT{
 
     #define SWAP(a,b) tempr=(a); (a)=(b); (b) = tempr
     
@@ -482,28 +482,28 @@
      * Test program to take an N-point FFT.
      */
     
-    int main()
-    {
-        const unsigned N = 8;
-    
-        float data[2*N];
-    
-        int i;
-    
-        for (i=0; i < 2*N; ++i)
-            data[i] = i;
-    
-        FFTServer<N>::FFT(data-1);       // Original four1() used arrays starting
-                                         // at 1 instead of 0
-    
-        std::cout << "Transformed data:" << std::endl;
-        
-        for (i=0; i < N; ++i)
-            std::cout << std::setw(10) << std::setprecision(5) << data[2*i] << "\t"
-                 << data[2*i+1] << "I" << std::endl;
-    
-        return 0;
-    }
-//}
+    //int main()
+    //{
+    //    const unsigned N = 8;
+    //
+    //    float data[2*N];
+    //
+    //    int i;
+    //
+    //    for (i=0; i < 2*N; ++i)
+    //        data[i] = i;
+    //
+    //    FFTServer<N>::FFT(data-1);       // Original four1() used arrays starting
+    //                                     // at 1 instead of 0
+    //
+    //    std::cout << "Transformed data:" << std::endl;
+    //    
+    //    for (i=0; i < N; ++i)
+    //        std::cout << std::setw(10) << std::setprecision(5) << data[2*i] << "\t"
+    //             << data[2*i+1] << "I" << std::endl;
+    //
+    //    return 0;
+    //}
+}
 //
 //#endif
