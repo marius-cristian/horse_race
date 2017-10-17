@@ -9,12 +9,12 @@ int main(){
 	multi_word_integer<64> z = x + y;
 	y = z - x;
 	std::cout << x << " " << y << " " << z << "\n" ;
-	Z<3> t{3};
-	Z<3> u;
-	u = u - t;
-	if(u != -t) {
-		assert( false ) ;
-	}	
+	//Z<3> t{3};
+	//Z<3> u;
+	//u = u - t;
+	//if(u != -t) {
+	//	assert( false ) ;
+	//}	
 	return 0;
 }
 
