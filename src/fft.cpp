@@ -20,8 +20,8 @@
  */
 
 /*
- *  Corrected to compile with gcc --version
- *                            gcc (Ubuntu 5.4.0-6ubuntu1~16.04.4) 5.4.0 20160609
+ *  Modified to compile with  g++ --version
+ *                            g++ (Ubuntu 5.4.0-6ubuntu1~16.04.4) 5.4.0 20160609
  *  2017-10-16
  *
  *  Marius-Florin Cristian
