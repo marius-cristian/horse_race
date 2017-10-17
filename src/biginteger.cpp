@@ -4,11 +4,21 @@
 
 int main(){
 	using namespace cphstl;
-	multi_word_integer<64> x = 345;
-	multi_word_integer<64> y = 511;
-	multi_word_integer<64> z = x + y;
+	multi_word_integer<120> x = 345;
+	multi_word_integer<120> y = 511;
+	multi_word_integer<120> z = x + y;
 	//y = z - x;
-	std::cout << x << " " << y << " " << z << "\n" ;
+	std::cout << x << "<-x " << y << "<-y " << z << "<-z\n" ;
+
+	//plain_natural<3> aux{3};
+	//plain_integer<3> t{3};
+	//plain_integer<3> u;
+	//u=u-t;
+	//plain_integer<6> mul;
+	//mul=(plain_integer<6>)t*(plain_integer<6>)t;
+	//if(u!= -t){
+	//	assert (false);
+	//}
 	//Z<3> t{3};
 	//Z<3> u;
 	//u = u - t;
