@@ -639,8 +639,8 @@ constexpr explicit multi_word_integer( )
 
 template<typename Integer>
 multi_word_integer(Integer value)
-: a(T(value) ) {
-// Does not work! Cut the extra
+: a{T(value)} {
+	//works now
 }
 
 multi_word_integer(multi_word_integer<b> const& )= default ;
