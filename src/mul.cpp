@@ -1,10 +1,21 @@
 /*
 	Multiplication template and implementations	
-	https://gist.github.com/jargnar/3263916
+	
+    based on this: https://gist.github.com/jargnar/3263916
+
+    EDIT 1: no more segmentation faults;
+            4000x4000 digits
+
+    EDIT 2: switch to std::vector; try to increase digits
+            didnt work;
+            at the moment we store a digit (1 to 9) in a int datastructure;
+            thus 28-29 bits are all empty
+
+    EDIT 3: reduce data structure in memory 
 */
 
 #include "fft.h++"
-
+#include <vector> //std::vector
 #include <iostream>
 #include <string>
 #define OVERFLOW 2
@@ -29,14 +40,18 @@ int num(char a) {
     return int(a)-48;
 }
 
+
+//std::vector<std::vector<int>> readData(string a, string b){
+//
+//}
+
 string mult(string a, string b) {
         string ret;
         long a_len = a.length();
         long b_len = b.length();
-        int ** mat;
-        mat=new int* [ROW];
+        //this should be moved in readData
+        std::vector<std::vector<int>> mat(ROW, std::vector<int>(COL));
         for(int i =0; i<ROW; ++i) {
-        	mat[i]=new int[COL];
             for(int j=0; j<COL; ++j) {
                 mat[i][j] = 0;
 
@@ -60,8 +75,9 @@ string mult(string a, string b) {
         }
 
         carry = 0;
-        long *sum_arr;
-        sum_arr=new long[COL];
+        //long *sum_arr;
+        std::vector<int>sum_arr(COL);
+        //sum_arr=new long[COL];
         for(long i =0; i<COL; ++i) sum_arr[i] = 0;
         for(long i=0; i<ROW; ++i) {
             for(long j=COL-1; j>=0; --j) {
@@ -75,7 +91,7 @@ string mult(string a, string b) {
             sum_arr[i] = sum_arr[i]%10;
             carry = getCarry(temp);
         }
-
+        //this should be moved into output data
         for(long i=0; i<COL; ++i) {
             ret.push_back(char(sum_arr[i]+48));
         }
@@ -85,6 +101,10 @@ string mult(string a, string b) {
         }
         return ret;
 }
+
+//string outputData(std::vector<std::vector<int>> mat){
+//    
+//}
 
 void printhuge(string a) {
     cout<<"\n";
