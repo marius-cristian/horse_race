@@ -53,38 +53,96 @@ uint16_t num(string a) {
     return r;
 }
 
+//decodes cells;
 string display_cell(uint16_t cell){
     uint16_t _12mask=(uint16_t)15;//0b0000000000001111;
     uint16_t _8mask= (uint16_t)240;//0b0000000011110000;
     uint16_t _4mask= (uint16_t)3840;//0b0000111100000000;
-    //nomask
-    cout<<"mask: "<<_12mask<<" cell: "<<cell<<" mask & cell: "<<(cell & _12mask)<<'\n';
-    cout<<"mask: "<<_12mask<<" cell: "<<cell<<" mask & cell: "<<(cell & _8mask)<<'\n';
-    cout<<"mask: "<<_12mask<<" cell: "<<cell<<" mask & cell: "<<(cell & _4mask)<<'\n';
-
-    cout<<"mask: "<<_12mask<<" cell: "<<cell<<" mask & cell & shift: "<<(cell & _12mask)<<'\n';
-    cout<<"mask: "<<_12mask<<" cell: "<<cell<<" mask & cell & shift: "<<((cell & _4mask)>>8)<<'\n';
-    cout<<(cell>>12)<<'\n';
-    cout<<((cell & _4mask)>>8)<<'\n';
-    cout<<((cell & _8mask)>>4)<<'\n';
-    cout<<(cell & _12mask)<<'\n';
-    uint8_t c0=(char)(uint8_t)(cell>>12);
-    uint8_t c1=(char)(uint8_t)((cell & _4mask)>>8);
-    uint8_t c2=(char)(uint8_t)((cell & _8mask)>>4);
-    uint8_t c3=(char)(uint8_t)(cell & _12mask);
-    uint8_t arr[]={c0,c1,c2,c3};
-    cout<<"chars: "<<c0<<'\n';//<<c1<<c2<<c3<<'\n';
-    //char res []={c0,c1,c2,c3,'\0'};//builds back the result   
-    //cout<<"res: "<<res[0]<<'\n';
+    char c0='0'+(uint8_t)(cell>>12);
+    char c1='0'+(uint8_t)((cell & _4mask)>>8);
+    char c2='0'+(uint8_t)((cell & _8mask)>>4);
+    char c3='0'+(uint8_t)(cell & _12mask);
+    char arr[]={c0,c1,c2,c3};
     string res_s=string((char *) &arr);
-    res_s+=c0;
-    res_s+=c1;
-    res_s+=c2;
-    res_s+=c3;
-    cout<<"heyo "<<res_s<<'\n';
     return res_s;
 }
 
+//basic_mul
+//we  have encoded cells, so each 4 bit group cannot be larger than 1001
+//if they are larger than 1001, it is considered overflow
+uint16_t encoded_naive_mul(uint16_t a, uint16_t b, uint16_t carry_bit, uint16_t &result){
+    //15;//0b0000000000001111
+    //240;//0b0000000011110000
+    //3840;//0b0000111100000000
+
+    //used to carry between nibbles; as they are encoded 0-9; everything else is overflow    
+    uint16_t carry;
+    uint16_t carry_aux;
+    //used to keep the carry that gets returned;
+    uint16_t carry_result;
+    uint16_t a3=a>>12;//first nibble
+    uint16_t a2=(a&3840)>>8;//2nd nibble
+    uint16_t a1=(a&240)>>4;//3rd nibble
+    uint16_t a0=a&15;//4th nibble
+
+    uint16_t b3=b>>12;//first nibble;
+    uint16_t b2=(b&3840)>>8;
+    uint16_t b1=(b&240)>>4;
+    uint16_t b0=b&15;//4th nibble;
+
+
+
+    uint16_t mod9_carry_bit;
+
+    //result for multiplying tail nibbles (low order to high order)
+    uint16_t r0;
+    uint16_t r1;
+    uint16_t r2;
+    uint16_t r3;
+    //result for multiplying head nibbles
+    uint16_t r4;
+    uint16_t r5;
+    uint16_t r6;
+    uint16_t r7;
+
+    //last digit multiplication with everybody
+    //last 2 digits
+    r0=a0*b0;
+    //check if nibble is lower than 9
+    mod9_carry_bit= (r0&15 <= 9)? 0 : (r0&15 - 9);
+    //carry is the next nibble + digit carry mod9_carry_bit
+    carry=r0>>4 +mod9_carry_bit;
+    //last digit mod 9
+    r0&=10;
+    //end of first multiplication;
+
+    r1=a0*b1 + carry;
+    mod9_carry_bit= (r1&15 <= 9)? 0 : (r1&15 - 9);
+    carry=r1>>4+mod9_carry_bit;
+    r1&=10;
+
+    r2=a0*b2+carry;
+    mod9_carry_bit= (r2&15 <= 9)? 0 : (r2&15 - 9);
+    carry=r2>>4+mod9_carry_bit;
+    r2&=10;
+
+    r3=a0*b3+carry;
+    mod9_carry_bit= (r3&15 <= 9)? 0 : (r3&15 - 9);
+    carry=r3>>4+mod9_carry_bit;
+    r3&=10;
+
+    carry_aux=carry;//last nibble
+    //finished first multiplication round; O(4*5)=O(20)
+
+    //we update carry_aux at the 3rd(last nibble) and 4th(2nd to last nibble) operation
+    r4=a1*b0;
+    mod9_carry_bit= (r4&15 <= 9)? 0 : (r4&15 - 9);
+    carry=r4>>4+mod9_carry_bit;
+    r4&=10;
+
+    //must update carry_aux
+    //must add at final adition, the carry_bit + carry_aux
+}
 
 uint16_t carry(uint16_t a, uint16_t b){
     uint16_t    a_lo = (uint8_t)a;
@@ -215,8 +273,8 @@ int main() {
     cin>>a;
     cout<<"string to number: "<<num(a)<<'\n';
     cout<<"number to string: "<<display_cell(num(a))<<'\n';
-    //uint16_t r=carry(num(a),num(a));
-    //cout<<r<<'\n';
+    uint16_t r=carry(num(a),num(a));
+    cout<<display_cell(r)<<'\n';
     //cout<<getCarry_2(r)<<'\n';
     ////cout<<r+getCarry_2(r)<<'\n';
 //
