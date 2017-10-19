@@ -76,11 +76,11 @@ uint16_t mod_digit(uint16_t &x){
     if((x&15)<=9){
         x&=15;
         //cout<<"mod_digit debug if branch: "<<display_cell(x)<<'\n';
-        return ((x>>4)&15);
+        return ((((x>>1) /5))&15); //this is /10; but 10=2*5; dont know how to write /5 bitwise
     }
     x=(x&15)-10;
     //cout<<"mod_digit debug else branch: "<<display_cell(x)<<'\n';
-    return ((x>>4)&15 + 1);
+    return (((x>>1)/5)&15 + 1);
 }
 
 
