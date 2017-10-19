@@ -90,11 +90,12 @@ uint16_t encoded_naive_mul(uint16_t a, uint16_t b, uint16_t carry_bit, uint16_t 
     uint16_t b1=(b&240)>>4;
     uint16_t b0=b&15;//4th nibble;
 
-
+    uint16_t carry_result;
 
     uint16_t mod9_carry_bit;
 
     //result for multiplying tail nibbles (low order to high order)
+    uint16_t raux;
     uint16_t r0;
     uint16_t r1;
     uint16_t r2;
@@ -105,43 +106,184 @@ uint16_t encoded_naive_mul(uint16_t a, uint16_t b, uint16_t carry_bit, uint16_t 
     uint16_t r6;
     uint16_t r7;
 
+    uint16_t r8;
+    uint16_t r9;
+    uint16_t r10;
+    uint16_t r11;
+
+    uint16_t r12;
+    uint16_t r13;
+    uint16_t r14;
+    uint16_t r15;        
+    /*
+    result will be:
+    r0 + (r4+r1+carry_1 % 10)<<4 + (r2+r5+r7+ carry)<<8 + (r3+r6+r9+r12+carry)<<12
+
+    carry returned will be:
+        (r7+r10+r13+ carry)+(r11+r14+carry)<<4+(r15+carry)<<8+ carry<<12 
+
+
+     multiplying       a3 a2 a1 a0 (*)
+                       b3 b2 b1 b0
+                    ----------------
+                  c1 | r3 r2 r1 r0
+               c2 r7 | r6 r5 r4
+           c3 r11 r10| r9 r8
+       c4 r15 r14 r13| r12     
+    */
+
     //last digit multiplication with everybody
-    //last 2 digits
+    //last digit
     r0=a0*b0;
     //check if nibble is lower than 9
-    mod9_carry_bit= (r0&15 <= 9)? 0 : (r0&15 - 9);
-    //carry is the next nibble + digit carry mod9_carry_bit
-    carry=r0>>4 +mod9_carry_bit;
-    //last digit mod 9
-    r0&=10;
+    raux=r0;
+    mod9_carry_bit= mod_digit(r0);
+    carry=raux>>4 +mod9_carry_bit;
     //end of first multiplication;
 
     r1=a0*b1 + carry;
-    mod9_carry_bit= (r1&15 <= 9)? 0 : (r1&15 - 9);
-    carry=r1>>4+mod9_carry_bit;
-    r1&=10;
+    raux=r1;
+    mod9_carry_bit= mod_digit(r1);
+    carry=raux>>4 +mod9_carry_bit;
 
     r2=a0*b2+carry;
-    mod9_carry_bit= (r2&15 <= 9)? 0 : (r2&15 - 9);
-    carry=r2>>4+mod9_carry_bit;
-    r2&=10;
+    raux=r2;
+    mod9_carry_bit= mod_digit(r2);
+    carry=raux>>4 +mod9_carry_bit;
 
     r3=a0*b3+carry;
-    mod9_carry_bit= (r3&15 <= 9)? 0 : (r3&15 - 9);
-    carry=r3>>4+mod9_carry_bit;
-    r3&=10;
+    raux=r3;
+    mod9_carry_bit= mod_digit(r3);
+    carry=raux>>4 +mod9_carry_bit;
 
     carry_aux=carry;//last nibble
     //finished first multiplication round; O(4*5)=O(20)
 
     //we update carry_aux at the 3rd(last nibble) and 4th(2nd to last nibble) operation
     r4=a1*b0;
-    mod9_carry_bit= (r4&15 <= 9)? 0 : (r4&15 - 9);
-    carry=r4>>4+mod9_carry_bit;
-    r4&=10;
+    raux=r4;
+    mod9_carry_bit= mod_digit(r4);
+    carry=raux>>4 +mod9_carry_bit;
 
-    //must update carry_aux
-    //must add at final adition, the carry_bit + carry_aux
+    r5=a1*b1+carry;
+    raux=r5;
+    mod9_carry_bit= mod_digit(r5);
+    carry=raux>>4 +mod9_carry_bit;
+
+    r6=a1*b2+carry;
+    raux=r6;
+    mod9_carry_bit= mod_digit(r6);
+    carry=raux>>4 +mod9_carry_bit;
+
+    //add carry aux form last round
+    r7=a1*b3+carry+carry_aux;
+    raux=r7;
+    mod9_carry_bit= mod_digit(r7);
+    carry=raux>>4 +mod9_carry_bit; 
+
+    carry_aux=carry; 
+    //finished second round
+
+    r8=a2*b0;
+    raux=r8;
+    mod9_carry_bit= mod_digit(r8);
+    carry=raux>>4 +mod9_carry_bit;
+
+    r9=a2*b1+carry;
+    raux=r9;
+    mod9_carry_bit= mod_digit(r9);
+    carry=raux>>4 +mod9_carry_bit;
+
+    r10=a2*b2+carry;
+    raux=r10;
+    mod9_carry_bit= mod_digit(r10);
+    carry=raux>>4 +mod9_carry_bit;
+
+    //add carry aux form last round
+    r11=a2*b3+carry+carry_aux;
+    raux=r11;
+    mod9_carry_bit= mod_digit(r11);
+    carry=raux>>4 +mod9_carry_bit; 
+
+    carry_aux=carry;
+
+    r12=a3*b0;
+    raux=r12;
+    mod9_carry_bit= mod_digit(r12);
+    carry=raux>>4 +mod9_carry_bit;
+
+    r13=a3*b1+carry;
+    raux=r13;
+    mod9_carry_bit= mod_digit(r13);
+    carry=raux>>4 +mod9_carry_bit;
+
+    r14=a3*b2+carry;
+    raux=r14;
+    mod9_carry_bit= mod_digit(r14);
+    carry=raux>>4 +mod9_carry_bit;
+
+    //add carry aux form last round
+    r15=a3*b3+carry+carry_aux;
+    raux=r15;
+    mod9_carry_bit= mod_digit(r15);
+    carry=raux>>4 +mod9_carry_bit; 
+
+    carry_aux=carry;
+
+    //finished all rounds; now must update result; and carry;
+    result=r0;//unit digit
+    //use r0 as aux space;
+    r0=r1+r4;
+    raux=r0;
+    mod9_carry_bit= mod_digit(r0);
+    carry=raux>>4 +mod9_carry_bit;
+    result+= (r0<<4); //10th order digit
+
+    r0=r2+r5+r7+carry;
+    raux=r0;
+    mod9_carry_bit= mod_digit(r0);
+    carry=raux>>4 +mod9_carry_bit;
+    result+= (r0<<8); //100th order digit
+
+    r0=r3+r6+r9+r12+carry;
+    raux=r0;
+    mod9_carry_bit= mod_digit(r0);
+    carry=raux>>4 +mod9_carry_bit;
+    result+= (r0<<12); //1000th order digit  
+
+
+    //computing carry;
+
+    carry_result=r7+r10+r13;     
+    raux=carry_result;
+    mod9_carry_bit=mod_digit(carry_result);//rightmost digit of carry
+    carry=raux>>4+ mod9_carry_bit;
+
+    //now use r7 as aux space for computation
+    r7=r11+r14+carry;
+    raux=r7;
+    mod9_carry_bit=mod_digit(r7);
+    carry=raux>>4+ mod9_carry_bit;
+    carry_result+= (r7<<4);//2-rightmost digits
+
+    r7=r15+carry;
+    raux=r7;
+    mod9_carry_bit=mod_digit(r7);
+    carry=raux>>4+ mod9_carry_bit;
+    carry_result+= (r7<<8);//3-rightmost digits
+
+    r7=carry_aux+carry;
+    raux=r7;
+    mod9_carry_bit=mod_digit(r7);
+    //there exists no more carry
+    carry_result+= (r7<<12);//2-rightmost digits
+}
+
+//check if nibble is lower than 9;
+//add 1 to carry if nible is bigger than 9; else nothin;
+//modify value in place
+uint16_t mod_digit(uint16_t &x){
+    (x&15<=9)?{x&=15, return (uint16_t)0}:{x=x&15-10, return (uint16_t)1};
 }
 
 uint16_t carry(uint16_t a, uint16_t b){
