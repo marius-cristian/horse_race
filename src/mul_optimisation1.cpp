@@ -73,14 +73,16 @@ string display_cell(uint16_t cell){
 //add 1 to carry if nible is bigger than 9; else nothin;
 //modify value in place
 uint16_t mod_digit(uint16_t &x){
+    int16_t aux;
     if((x&15)<=9){
-        x&=15;
         //cout<<"mod_digit debug if branch: "<<display_cell(x)<<'\n';
-        return ((((x>>1) /5))); //this is /10; but 10=2*5; dont know how to write /5 bitwise
+        aux= ((((x>>1) /5))); //this is /10; but 10=2*5; dont know how to write /5 bitwise
+        x&=15;
     }
-    x=(x&15)-10;
     //cout<<"mod_digit debug else branch: "<<display_cell(x)<<'\n';
-    return (((x>>1)/5) + 1);
+    aux= (((x>>1)/5) + 1);
+    x=(x&15)-10;
+    return aux;
 }
 
 
