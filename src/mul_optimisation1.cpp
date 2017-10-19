@@ -58,10 +58,11 @@ string display_cell(uint16_t cell){
     uint16_t _12mask=(uint16_t)15;//0b0000000000001111;
     uint16_t _8mask= (uint16_t)240;//0b0000000011110000;
     uint16_t _4mask= (uint16_t)3840;//0b0000111100000000;
-    char c0='0'+(uint8_t)(cell>>12);
-    char c1='0'+(uint8_t)((cell & _4mask)>>8);
-    char c2='0'+(uint8_t)((cell & _8mask)>>4);
-    char c3='0'+(uint8_t)(cell & _12mask);
+                   
+    char c0='0'+(cell>>12);
+    char c1='0'+(((cell & _4mask)>>8));
+    char c2='0'+(((cell & _8mask)>>4));
+    char c3='0'+((cell & _12mask));
     char arr[]={c0,c1,c2,c3};
     string res_s=string((char *) &arr);
     return res_s;
@@ -72,12 +73,14 @@ string display_cell(uint16_t cell){
 //add 1 to carry if nible is bigger than 9; else nothin;
 //modify value in place
 uint16_t mod_digit(uint16_t &x){
-    if(x&15<=9){
+    if((x&15)<=9){
         x&=15;
-        return 0;
+        cout<<"mod_digit debug if branch: "<<display_cell(x)<<'\n';
+        return ((x>>4)&15);
     }
-    x=x&15-10;
-    return 1;
+    x=(x&15)-10;
+    cout<<"mod_digit debug else branch: "<<display_cell(x)<<'\n';
+    return ((x>>4)&15 + 1);
 }
 
 
@@ -94,10 +97,10 @@ uint16_t encoded_naive_mul(uint16_t a, uint16_t b, uint16_t carry_bit, uint16_t 
     uint16_t carry_aux;
     //used to keep the carry that gets returned;
     uint16_t carry_result;
-    uint16_t a3=a>>12;//first nibble
+    uint16_t a3=(a>>12);//first nibble
     uint16_t a2=(a&3840)>>8;//2nd nibble
     uint16_t a1=(a&240)>>4;//3rd nibble
-    uint16_t a0=a&15;//4th nibble
+    uint16_t a0=(a&15);//4th nibble
 
     uint16_t b3=b>>12;//first nibble;
     uint16_t b2=(b&3840)>>8;
@@ -146,27 +149,41 @@ uint16_t encoded_naive_mul(uint16_t a, uint16_t b, uint16_t carry_bit, uint16_t 
 
     //last digit multiplication with everybody
     //last digit
+    std::bitset<16> z(a);
+    cout<<"16 bits of input a: "<<z<<'\n';
+    std::bitset<16> zz(a0);
+    cout<<"16 bitsof input a0: "<<zz<<'\n';
+
+    //cout<<"a0 before: "<<display_cell(a0)<<'\n';
+    //cout<<"b0 before: "<<display_cell(b0)<<'\n';
     r0=a0*b0;
+    std::bitset<16> zr(r0);
+    cout<<"16 bitsof input zr: "<<zr<<'\n';
+    cout<<"r0 before: "<<display_cell(r0)<<'\n';
     //check if nibble is lower than 9
     raux=r0;
     mod9_carry_bit= mod_digit(r0);
-    carry=raux>>4 +mod9_carry_bit;
+    cout<<"r0 after: "<<display_cell(r0)<<'\n';    
+    carry=(((raux>>4))) +mod9_carry_bit;
+    std::bitset<16> zrr(carry);
+    cout<<"16 bitsof input carry: "<<zrr<<'\n';    
+    //cout<<"c0_1: "<<display_cell(carry)<<'\n';
     //end of first multiplication;
 
     r1=a0*b1 + carry;
     raux=r1;
     mod9_carry_bit= mod_digit(r1);
-    carry=raux>>4 +mod9_carry_bit;
+    carry=(raux>>4) +mod9_carry_bit;
 
     r2=a0*b2+carry;
     raux=r2;
     mod9_carry_bit= mod_digit(r2);
-    carry=raux>>4 +mod9_carry_bit;
+    carry=(raux>>4) +mod9_carry_bit;
 
     r3=a0*b3+carry;
     raux=r3;
     mod9_carry_bit= mod_digit(r3);
-    carry=raux>>4 +mod9_carry_bit;
+    carry=(raux>>4) +mod9_carry_bit;
 
     carry_aux=carry;//last nibble
     //finished first multiplication round; O(4*5)=O(20)
@@ -175,23 +192,23 @@ uint16_t encoded_naive_mul(uint16_t a, uint16_t b, uint16_t carry_bit, uint16_t 
     r4=a1*b0;
     raux=r4;
     mod9_carry_bit= mod_digit(r4);
-    carry=raux>>4 +mod9_carry_bit;
+    carry=(raux>>4) +mod9_carry_bit;
 
     r5=a1*b1+carry;
     raux=r5;
     mod9_carry_bit= mod_digit(r5);
-    carry=raux>>4 +mod9_carry_bit;
+    carry=(raux>>4) +mod9_carry_bit;
 
     r6=a1*b2+carry;
     raux=r6;
     mod9_carry_bit= mod_digit(r6);
-    carry=raux>>4 +mod9_carry_bit;
+    carry=(raux>>4) +mod9_carry_bit;
 
     //add carry aux form last round
     r7=a1*b3+carry+carry_aux;
     raux=r7;
     mod9_carry_bit= mod_digit(r7);
-    carry=raux>>4 +mod9_carry_bit; 
+    carry=(raux>>4) +mod9_carry_bit; 
 
     carry_aux=carry; 
     //finished second round
@@ -199,46 +216,46 @@ uint16_t encoded_naive_mul(uint16_t a, uint16_t b, uint16_t carry_bit, uint16_t 
     r8=a2*b0;
     raux=r8;
     mod9_carry_bit= mod_digit(r8);
-    carry=raux>>4 +mod9_carry_bit;
+    carry=(raux>>4) +mod9_carry_bit;
 
     r9=a2*b1+carry;
     raux=r9;
     mod9_carry_bit= mod_digit(r9);
-    carry=raux>>4 +mod9_carry_bit;
+    carry=(raux>>4) +mod9_carry_bit;
 
     r10=a2*b2+carry;
     raux=r10;
     mod9_carry_bit= mod_digit(r10);
-    carry=raux>>4 +mod9_carry_bit;
+    carry=(raux>>4) +mod9_carry_bit;
 
     //add carry aux form last round
     r11=a2*b3+carry+carry_aux;
     raux=r11;
     mod9_carry_bit= mod_digit(r11);
-    carry=raux>>4 +mod9_carry_bit; 
+    carry=(raux>>4) +mod9_carry_bit; 
 
     carry_aux=carry;
 
     r12=a3*b0;
     raux=r12;
     mod9_carry_bit= mod_digit(r12);
-    carry=raux>>4 +mod9_carry_bit;
+    carry=(raux>>4) +mod9_carry_bit;
 
     r13=a3*b1+carry;
     raux=r13;
     mod9_carry_bit= mod_digit(r13);
-    carry=raux>>4 +mod9_carry_bit;
+    carry=(raux>>4) +mod9_carry_bit;
 
     r14=a3*b2+carry;
     raux=r14;
     mod9_carry_bit= mod_digit(r14);
-    carry=raux>>4 +mod9_carry_bit;
+    carry=(raux>>4) +mod9_carry_bit;
 
     //add carry aux form last round
     r15=a3*b3+carry+carry_aux;
     raux=r15;
     mod9_carry_bit= mod_digit(r15);
-    carry=raux>>4 +mod9_carry_bit; 
+    carry=(raux>>4) +mod9_carry_bit; 
 
     carry_aux=carry;
 
@@ -248,19 +265,19 @@ uint16_t encoded_naive_mul(uint16_t a, uint16_t b, uint16_t carry_bit, uint16_t 
     r0=r1+r4;
     raux=r0;
     mod9_carry_bit= mod_digit(r0);
-    carry=raux>>4 +mod9_carry_bit;
+    carry=(raux>>4) +mod9_carry_bit;
     result+= (r0<<4); //10th order digit
 
     r0=r2+r5+r7+carry;
     raux=r0;
     mod9_carry_bit= mod_digit(r0);
-    carry=raux>>4 +mod9_carry_bit;
+    carry=(raux>>4) +mod9_carry_bit;
     result+= (r0<<8); //100th order digit
 
     r0=r3+r6+r9+r12+carry;
     raux=r0;
     mod9_carry_bit= mod_digit(r0);
-    carry=raux>>4 +mod9_carry_bit;
+    carry=(raux>>4) +mod9_carry_bit;
     result+= (r0<<12); //1000th order digit  
 
 
@@ -269,19 +286,19 @@ uint16_t encoded_naive_mul(uint16_t a, uint16_t b, uint16_t carry_bit, uint16_t 
     carry_result=r7+r10+r13;     
     raux=carry_result;
     mod9_carry_bit=mod_digit(carry_result);//rightmost digit of carry
-    carry=raux>>4+ mod9_carry_bit;
+    carry=(raux>>4)+ mod9_carry_bit;
 
     //now use r7 as aux space for computation
     r7=r11+r14+carry;
     raux=r7;
     mod9_carry_bit=mod_digit(r7);
-    carry=raux>>4+ mod9_carry_bit;
+    carry=(raux>>4)+ mod9_carry_bit;
     carry_result+= (r7<<4);//2-rightmost digits
 
     r7=r15+carry;
     raux=r7;
     mod9_carry_bit=mod_digit(r7);
-    carry=raux>>4+ mod9_carry_bit;
+    carry=(raux>>4)+ mod9_carry_bit;
     carry_result+= (r7<<8);//3-rightmost digits
 
     r7=carry_aux+carry;
@@ -419,9 +436,15 @@ int main() {
     string a;
     cin>>a;
     cout<<"string to number: "<<num(a)<<'\n';
-    cout<<"number to string: "<<display_cell(num(a))<<'\n';
+    //cout<<"number to string: "<<display_cell(num(a))<<'\n';
     uint16_t r=carry(num(a),num(a));
-    cout<<display_cell(r)<<'\n';
+    //cout<<display_cell(r)<<'\n';
+
+    uint16_t result;
+    uint16_t carry_1;
+    carry_1=encoded_naive_mul(num(a),num(a),0,result);
+    cout<<"decode result: "<<display_cell(result)<<'\n';
+    cout<<"decode carry: "<<display_cell(carry_1)<<'\n';
     //cout<<getCarry_2(r)<<'\n';
     ////cout<<r+getCarry_2(r)<<'\n';
 //
