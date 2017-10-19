@@ -67,6 +67,20 @@ string display_cell(uint16_t cell){
     return res_s;
 }
 
+
+//check if nibble is lower than 9;
+//add 1 to carry if nible is bigger than 9; else nothin;
+//modify value in place
+uint16_t mod_digit(uint16_t &x){
+    if(x&15<=9){
+        x&=15;
+        return 0;
+    }
+    x=x&15-10;
+    return 1;
+}
+
+
 //basic_mul
 //we  have encoded cells, so each 4 bit group cannot be larger than 1001
 //if they are larger than 1001, it is considered overflow
@@ -89,8 +103,6 @@ uint16_t encoded_naive_mul(uint16_t a, uint16_t b, uint16_t carry_bit, uint16_t 
     uint16_t b2=(b&3840)>>8;
     uint16_t b1=(b&240)>>4;
     uint16_t b0=b&15;//4th nibble;
-
-    uint16_t carry_result;
 
     uint16_t mod9_carry_bit;
 
@@ -277,13 +289,6 @@ uint16_t encoded_naive_mul(uint16_t a, uint16_t b, uint16_t carry_bit, uint16_t 
     mod9_carry_bit=mod_digit(r7);
     //there exists no more carry
     carry_result+= (r7<<12);//2-rightmost digits
-}
-
-//check if nibble is lower than 9;
-//add 1 to carry if nible is bigger than 9; else nothin;
-//modify value in place
-uint16_t mod_digit(uint16_t &x){
-    (x&15<=9)?{x&=15, return (uint16_t)0}:{x=x&15-10, return (uint16_t)1};
 }
 
 uint16_t carry(uint16_t a, uint16_t b){
