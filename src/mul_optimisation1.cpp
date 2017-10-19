@@ -49,7 +49,7 @@ uint16_t num(string a) {
                 ((uint16_t)(a[1]-'0')<<8)+
                 ((uint16_t)(a[2]-'0')<<4)+
                 ((uint16_t)(a[3]-'0'));
-    cout<<r<<'\n';            
+    //cout<<r<<'\n';            
     return r;
 }
 
@@ -75,11 +75,11 @@ string display_cell(uint16_t cell){
 uint16_t mod_digit(uint16_t &x){
     if((x&15)<=9){
         x&=15;
-        cout<<"mod_digit debug if branch: "<<display_cell(x)<<'\n';
+        //cout<<"mod_digit debug if branch: "<<display_cell(x)<<'\n';
         return ((x>>4)&15);
     }
     x=(x&15)-10;
-    cout<<"mod_digit debug else branch: "<<display_cell(x)<<'\n';
+    //cout<<"mod_digit debug else branch: "<<display_cell(x)<<'\n';
     return ((x>>4)&15 + 1);
 }
 
@@ -149,24 +149,24 @@ uint16_t encoded_naive_mul(uint16_t a, uint16_t b, uint16_t carry_bit, uint16_t 
 
     //last digit multiplication with everybody
     //last digit
-    std::bitset<16> z(a);
-    cout<<"16 bits of input a: "<<z<<'\n';
-    std::bitset<16> zz(a0);
-    cout<<"16 bitsof input a0: "<<zz<<'\n';
+    //std::bitset<16> z(a);
+    //cout<<"16 bits of input a: "<<z<<'\n';
+    //std::bitset<16> zz(a0);
+    //cout<<"16 bitsof input a0: "<<zz<<'\n';
 
     //cout<<"a0 before: "<<display_cell(a0)<<'\n';
     //cout<<"b0 before: "<<display_cell(b0)<<'\n';
     r0=a0*b0;
     std::bitset<16> zr(r0);
-    cout<<"16 bitsof input zr: "<<zr<<'\n';
-    cout<<"r0 before: "<<display_cell(r0)<<'\n';
+    //cout<<"16 bitsof input zr: "<<zr<<'\n';
+    //cout<<"r0 before: "<<display_cell(r0)<<'\n';
     //check if nibble is lower than 9
     raux=r0;
     mod9_carry_bit= mod_digit(r0);
-    cout<<"r0 after: "<<display_cell(r0)<<'\n';    
+    //cout<<"r0 after: "<<display_cell(r0)<<'\n';    
     carry=(((raux>>4))) +mod9_carry_bit;
-    std::bitset<16> zrr(carry);
-    cout<<"16 bitsof input carry: "<<zrr<<'\n';    
+    //std::bitset<16> zrr(carry);
+    //cout<<"16 bitsof input carry: "<<zrr<<'\n';    
     //cout<<"c0_1: "<<display_cell(carry)<<'\n';
     //end of first multiplication;
 
@@ -327,13 +327,65 @@ uint16_t carry(uint16_t a, uint16_t b){
     //                     (a_x_b_mid >> 32) + (b_x_a_mid >> 32) +
     //                     carry_bit;
     uint32_t r=(((uint32_t)a_x_b_hi)<<16)+(((uint32_t)a_x_b_mid)+((uint32_t)b_x_a_mid)<<8)+a_x_b_lo;
-    cout<<"result: "<<r<<'\n';
-    cout<<"cast result: "<< (uint16_t)r<<'\n';
-    cout<<"carry bit: "<<carry_bit<<'\n';
-    cout<<"result + carry"<<r+carry_bit<<'\n';
+    //cout<<"result: "<<r<<'\n';
+    //cout<<"cast result: "<< (uint16_t)r<<'\n';
+    //cout<<"carry bit: "<<carry_bit<<'\n';
+    //cout<<"result + carry"<<r+carry_bit<<'\n';
     return carry_bit;    
 }
 
+vector<uint16_t> inputToVector(string a){
+    int aux=a.length()&3; //%4 operator
+    string first;
+    int i;
+    switch (aux){
+        case 0: first=a[0]+a[1]+a[2]+a[3];
+                i=4;
+                break;
+        case 1: first='0'+a[0]+a[1]+a[2];
+                i=3;
+                break;
+        case 2: first="00"+a[0]+a[1];
+                i=2;
+                break;
+        case 3: first="000"+a[0];
+                i=1;
+                break;
+        default: break;
+    }
+    int n=a.length()>>2;//division by 4, is shift by the power of 2^2;
+    vector<uint16_t> result;
+    result.push_back(num(first));
+    for(;i<n;i+=4){
+        first=a[i]+a[i+1]+a[i+2]+a[i+3];
+        result.push_back(num(first));
+    }
+    return result;
+}
+
+vector<uint16_t> mul_1(vector<uint16_t> a, vector<uint16_t> b){
+    long i;
+    long j;
+    vector<uint16_t> result;
+    uint16_t carry;
+    uint16_t inter_res;
+    for(i=0;i<a.size();i++){
+        carry=0;
+        for(j=0;j<b.size();j++){
+            carry=encoded_naive_mul(a[i],b[j],carry,inter_res);
+            result.push_back(inter_res);
+        }
+    }   
+}
+
+string vector_decode(vector<uint16_t> r){
+    long i;
+    string s="";
+    for (i=r.size()-1;i>=0;i--){
+        s+=display_cell(r[i]);
+    }
+    return s;
+}
 
 
 //std::vector<int> readStringToInt(string a, string b){
@@ -343,19 +395,19 @@ uint16_t carry(uint16_t a, uint16_t b){
 uint16_t getCarry_2(uint32_t ca){
 
 
-    cout<<"carry: "<<ca<<'\n';
-    std::bitset<32> z(ca);
-    cout<<"32 bits of input: "<<z<<'\n';
-    std::bitset<16> x(ca);
-    cout<<"16 bits of input: "<<x<<'\n';
-    std::bitset<16> y(ca>>16);
-    cout<<"16 bits >> 16 bits: "<<y<<'\n';    
-    cout<<"input >> 16 bits: "<<(ca>>16)<<'\n';
+    //cout<<"carry: "<<ca<<'\n';
+    //std::bitset<32> z(ca);
+    //cout<<"32 bits of input: "<<z<<'\n';
+    //std::bitset<16> x(ca);
+    //cout<<"16 bits of input: "<<x<<'\n';
+    //std::bitset<16> y(ca>>16);
+    //cout<<"16 bits >> 16 bits: "<<y<<'\n';    
+    //cout<<"input >> 16 bits: "<<(ca>>16)<<'\n';
     uint32_t shifted=ca>>16;
     uint16_t c=(uint16_t) shifted;
-    cout<<"uint16 of >> 16: "<<c<<'\n';
-    std::bitset<16> cr(c);
-    cout<<cr<<'\n';
+    //cout<<"uint16 of >> 16: "<<c<<'\n';
+    //std::bitset<16> cr(c);
+    //cout<<cr<<'\n';
     //cout<<cr+(uint16_t) ca<<'\n';
     return c;
 }
@@ -379,9 +431,9 @@ string mult(string a, string b) {
             carry = 0;
             for(long j=(COL-1)-i; j>=0; --j) {
                 if((x>=0)&&(y>=0))  {
-                   // n = (num(a[x])*num(b[y]))+carry;
-                    //mat[i][j] = n%10;
-                    //carry = getCarry(n);
+                  // n = (num(a[x])*num(b[y]))+carry;
+                  // mat[i][j] = n%10;
+                  // carry = getCarry(n);
                 }
                 else if((x>=-1)&&(y>=-1)) mat[i][j] = carry;
                 x=x-1;
@@ -433,18 +485,22 @@ int main() {
     //cin>>a>>b;
     //printhuge(mult(a,b));
     //return 0;
-    string a;
-    cin>>a;
-    cout<<"string to number: "<<num(a)<<'\n';
+    string a,b;
+    cin>>a>>b;
+    vector<uint16_t>n1= inputToVector(a);
+    vector<uint16_t>n2=inputToVector(b);
+    vector<uint16_t>r=mul_1(n1,n2);
+    //cout<<vector_decode(r);
+    //cout<<"string to number: "<<num(a)<<'\n';
     //cout<<"number to string: "<<display_cell(num(a))<<'\n';
-    uint16_t r=carry(num(a),num(a));
+    //uint16_t r=carry(num(a),num(a));
     //cout<<display_cell(r)<<'\n';
 
-    uint16_t result;
-    uint16_t carry_1;
-    carry_1=encoded_naive_mul(num(a),num(a),0,result);
-    cout<<"decode result: "<<display_cell(result)<<'\n';
-    cout<<"decode carry: "<<display_cell(carry_1)<<'\n';
+    //uint16_t result;
+    //uint16_t carry_1;
+    //carry_1=encoded_naive_mul(num(a),num(a),0,result);
+    //cout<<"decode result: "<<display_cell(result)<<'\n';
+    //cout<<"decode carry: "<<display_cell(carry_1)<<'\n';
     //cout<<getCarry_2(r)<<'\n';
     ////cout<<r+getCarry_2(r)<<'\n';
 //
