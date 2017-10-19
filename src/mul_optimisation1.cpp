@@ -375,7 +375,8 @@ vector<uint16_t> mul_1(vector<uint16_t> a, vector<uint16_t> b){
             carry=encoded_naive_mul(a[i],b[j],carry,inter_res);
             result.push_back(inter_res);
         }
-    }   
+    }
+    return result;   
 }
 
 string vector_decode(vector<uint16_t> r){
@@ -490,7 +491,7 @@ int main() {
     vector<uint16_t>n1= inputToVector(a);
     vector<uint16_t>n2=inputToVector(b);
     vector<uint16_t>r=mul_1(n1,n2);
-    //cout<<vector_decode(r);
+    cout<<vector_decode(r);
     //cout<<"string to number: "<<num(a)<<'\n';
     //cout<<"number to string: "<<display_cell(num(a))<<'\n';
     //uint16_t r=carry(num(a),num(a));
