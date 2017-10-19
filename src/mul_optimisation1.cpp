@@ -76,11 +76,11 @@ uint16_t mod_digit(uint16_t &x){
     if((x&15)<=9){
         x&=15;
         //cout<<"mod_digit debug if branch: "<<display_cell(x)<<'\n';
-        return ((((x>>1) /5))&15); //this is /10; but 10=2*5; dont know how to write /5 bitwise
+        return ((((x>>1) /5))); //this is /10; but 10=2*5; dont know how to write /5 bitwise
     }
     x=(x&15)-10;
     //cout<<"mod_digit debug else branch: "<<display_cell(x)<<'\n';
-    return (((x>>1)/5)&15 + 1);
+    return (((x>>1)/5) + 1);
 }
 
 
@@ -154,20 +154,20 @@ uint16_t encoded_naive_mul(uint16_t a, uint16_t b, uint16_t carry_bit, uint16_t 
     //std::bitset<16> zz(a0);
     //cout<<"16 bitsof input a0: "<<zz<<'\n';
 
-    //cout<<"a0 before: "<<display_cell(a0)<<'\n';
-    //cout<<"b0 before: "<<display_cell(b0)<<'\n';
+    cout<<"a0 before: "<<display_cell(a0)<<'\n';
+    cout<<"b0 before: "<<display_cell(b0)<<'\n';
     r0=a0*b0;
     std::bitset<16> zr(r0);
-    //cout<<"16 bitsof input zr: "<<zr<<'\n';
-    //cout<<"r0 before: "<<display_cell(r0)<<'\n';
+    cout<<"16 bitsof input zr: "<<zr<<'\n';
+    cout<<"r0 before: "<<display_cell(r0)<<'\n';
     //check if nibble is lower than 9
     raux=r0;
     mod9_carry_bit= mod_digit(r0);
-    //cout<<"r0 after: "<<display_cell(r0)<<'\n';    
+    cout<<"r0 after: "<<display_cell(r0)<<'\n';    
     carry=(((raux>>4))) +mod9_carry_bit;
-    //std::bitset<16> zrr(carry);
-    //cout<<"16 bitsof input carry: "<<zrr<<'\n';    
-    //cout<<"c0_1: "<<display_cell(carry)<<'\n';
+    std::bitset<16> zrr(carry);
+    cout<<"16 bitsof input carry: "<<zrr<<'\n';    
+    cout<<"c0_1: "<<display_cell(carry)<<'\n';
     //end of first multiplication;
 
     r1=a0*b1 + carry;
@@ -339,25 +339,26 @@ vector<uint16_t> inputToVector(string a){
     string first;
     int i;
     switch (aux){
-        case 0: first=a[0]+a[1]+a[2]+a[3];
+        case 0: first=string()+a[0]+a[1]+a[2]+a[3];
                 i=4;
                 break;
-        case 1: first='0'+a[0]+a[1]+a[2];
+        case 1: first=string()+'0'+a[0]+a[1]+a[2];
                 i=3;
                 break;
-        case 2: first="00"+a[0]+a[1];
+        case 2: first=string()+"00"+a[0]+a[1];
                 i=2;
                 break;
-        case 3: first="000"+a[0];
+        case 3: first=string()+"000"+a[0];
                 i=1;
                 break;
         default: break;
     }
+    cout<<"first debug: "<<first<<'\n';
     int n=a.length()>>2;//division by 4, is shift by the power of 2^2;
     vector<uint16_t> result;
     result.push_back(num(first));
     for(;i<n;i+=4){
-        first=a[i]+a[i+1]+a[i+2]+a[i+3];
+        first=string()+a[i]+a[i+1]+a[i+2]+a[i+3];
         result.push_back(num(first));
     }
     return result;
