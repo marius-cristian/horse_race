@@ -63,11 +63,9 @@ string display_cell(uint16_t cell){
 uint16_t mod_digit(uint16_t &x){
     int16_t aux;
     if((x&15)<=9){
-        //cout<<"mod_digit debug if branch: "<<display_cell(x)<<'\n';
         aux= ((((x) / (uint16_t)10)-((x>>4)&15))); //this is /10; but 10=2*5; dont know how to write /5 bitwise
         x=(x&15);
     }
-    //cout<<"mod_digit debug else branch: "<<display_cell(x)<<'\n';
     else{
     aux= (((x)/(uint16_t)10)-((x>>4)&15) + 1);
     x=((x&15)-10);
@@ -142,255 +140,249 @@ uint16_t encoded_naive_mul(uint16_t a, uint16_t b, uint16_t carry_bit, uint16_t 
     */
 
     //last digit multiplication with everybody
-    //last digit
-    //std::bitset<16> z(a);
-    //cout<<"16 bits of input a: "<<z<<'\n';
-    //std::bitset<16> zz(a0);
-    //cout<<"16 bitsof input a0: "<<zz<<'\n';
 
-
-    std::bitset<16> aa(a);
-    cout<<"16 bitsof input a: "<<aa<<'\n';
-
-    std::bitset<16> bb(b);
-    cout<<"16 bitsof input b: "<<bb<<'\n';
-
-    cout<<"a0 before: "<<display_cell(a0)<<'\n';
-    cout<<"b0 before: "<<display_cell(b0)<<'\n';
+    //std::bitset<16> aa(a);
+    //cout<<"16 bitsof input a: "<<aa<<'\n';
+//
+//    //std::bitset<16> bb(b);
+//    //cout<<"16 bitsof input b: "<<bb<<'\n';
+//
+//    //cout<<"a0 before: "<<display_cell(a0)<<'\n';
+    //cout<<"b0 before: "<<display_cell(b0)<<'\n';
     r0=a0*b0;
-    std::bitset<16> zr(r0);
-    cout<<"16 bitsof input zr: "<<zr<<'\n';
-    cout<<"r0 before: "<<display_cell(r0)<<'\n';
+    //std::bitset<16> zr(r0);
+    //cout<<"16 bitsof input zr: "<<zr<<'\n';
+    //cout<<"r0 before: "<<display_cell(r0)<<'\n';
     //check if nibble is lower than 9
     raux=r0;
     mod9_carry_bit= mod_digit(r0);
-    cout<<"r0 after: "<<display_cell(r0)<<'\n';    
+    //cout<<"r0 after: "<<display_cell(r0)<<'\n';    
     carry=(((raux>>4))) +mod9_carry_bit;
-    std::bitset<16> zrr(carry);
-    cout<<"16 bitsof input carry: "<<zrr<<'\n';    
-    cout<<"c0_1: "<<display_cell(carry)<<'\n';
-    cout<<'\n'; 
+    //std::bitset<16> zrr(carry);
+    //cout<<"16 bitsof input carry: "<<zrr<<'\n';    
+    //cout<<"c0_1: "<<display_cell(carry)<<'\n';
+    //cout<<'\n'; 
     //end of first multiplication;
 
     //works fine untill here
 
     r1=a0*b1 + carry;
-    std::bitset<16> zr1(r1);
-    cout<<"16 bitsof input r1: "<<zr1<<'\n';
-    cout<<"r1 after: "<<display_cell(r1)<<'\n';     
+    //std::bitset<16> zr1(r1);
+    //cout<<"16 bitsof input r1: "<<zr1<<'\n';
+    //cout<<"r1 after: "<<display_cell(r1)<<'\n';     
     raux=r1;
     mod9_carry_bit= mod_digit(r1);
-    cout<<"r1 after: "<<display_cell(r1)<<'\n';     
+    //cout<<"r1 after: "<<display_cell(r1)<<'\n';     
     carry=(raux>>4) +mod9_carry_bit;
-    std::bitset<16> zrr1(carry);
-    cout<<"16 bitsof input carry1: "<<zrr1<<'\n';    
-    cout<<"c0_2: "<<display_cell(carry)<<'\n'; 
-    cout<<'\n';    
+    //std::bitset<16> zrr1(carry);
+    //cout<<"16 bitsof input carry1: "<<zrr1<<'\n';    
+    //cout<<"c0_2: "<<display_cell(carry)<<'\n'; 
+    //cout<<'\n';    
 
     r2=a0*b2+carry;
-    std::bitset<16> zr2(r2);
-    cout<<"16 bitsof input r2: "<<zr2<<'\n';
-    cout<<"r2 after: "<<display_cell(r1)<<'\n';    
+    //std::bitset<16> zr2(r2);
+    //cout<<"16 bitsof input r2: "<<zr2<<'\n';
+    //cout<<"r2 after: "<<display_cell(r1)<<'\n';    
     raux=r2;
     mod9_carry_bit= mod_digit(r2);
-    cout<<"r2 after: "<<display_cell(r2)<<'\n';     
+    //cout<<"r2 after: "<<display_cell(r2)<<'\n';     
     carry=(raux>>4) +mod9_carry_bit;
-    std::bitset<16> zrr2(carry);
-    cout<<"16 bitsof input carry1: "<<zrr1<<'\n';    
-    cout<<"c0_2: "<<display_cell(carry)<<'\n'; 
-    cout<<'\n';    
+    //std::bitset<16> zrr2(carry);
+    //cout<<"16 bitsof input carry1: "<<zrr1<<'\n';    
+    //cout<<"c0_2: "<<display_cell(carry)<<'\n'; 
+    //cout<<'\n';    
 
     r3=a0*b3+carry;
-    std::bitset<16> zr3(r3);
-    cout<<"16 bitsof input r3: "<<zr3<<'\n';
-    cout<<"r1 after: "<<display_cell(r1)<<'\n';    
+    //std::bitset<16> zr3(r3);
+    //cout<<"16 bitsof input r3: "<<zr3<<'\n';
+    //cout<<"r1 after: "<<display_cell(r1)<<'\n';    
     raux=r3;
     mod9_carry_bit= mod_digit(r3);
-    cout<<"r3 after: "<<display_cell(r3)<<'\n';     
+    //cout<<"r3 after: "<<display_cell(r3)<<'\n';     
     carry=(raux>>4) +mod9_carry_bit;
-    std::bitset<16> zrr3(carry);
-    cout<<"16 bitsof input carry3: "<<zrr3<<'\n';    
-    cout<<"c0_3: "<<display_cell(carry)<<'\n';
-    cout<<'\n';     
+    //std::bitset<16> zrr3(carry);
+    //cout<<"16 bitsof input carry3: "<<zrr3<<'\n';    
+    //cout<<"c0_3: "<<display_cell(carry)<<'\n';
+    //cout<<'\n';     
 
     carry_aux=carry;//last nibble
     //finished first multiplication round; O(4*5)=O(20)
 
     //we update carry_aux at the 3rd(last nibble) and 4th(2nd to last nibble) operation
     r4=a1*b0;
-    std::bitset<16> zr4(r4);
-    cout<<"16 bitsof input r4: "<<zr4<<'\n';
-    cout<<"r1 after: "<<display_cell(r4)<<'\n';     
+    //std::bitset<16> zr4(r4);
+    //cout<<"16 bitsof input r4: "<<zr4<<'\n';
+    //cout<<"r1 after: "<<display_cell(r4)<<'\n';     
     raux=r4;
     mod9_carry_bit= mod_digit(r4);
-    cout<<"r4 after: "<<display_cell(r4)<<'\n';     
+    //cout<<"r4 after: "<<display_cell(r4)<<'\n';     
     carry=(raux>>4) +mod9_carry_bit;
-    std::bitset<16> zrr4(carry);
-    cout<<"16 bitsof input carry4: "<<zrr4<<'\n';    
-    cout<<"c0_4: "<<display_cell(carry)<<'\n'; 
-    cout<<'\n';     
+    //std::bitset<16> zrr4(carry);
+    //cout<<"16 bitsof input carry4: "<<zrr4<<'\n';    
+    //cout<<"c0_4: "<<display_cell(carry)<<'\n'; 
+    //cout<<'\n';     
 
     r5=a1*b1+carry;
 
     raux=r5;
-    std::bitset<16> zr5(r5);
-    cout<<"16 bitsof input r5: "<<zr5<<'\n';
-    cout<<"r1 after: "<<display_cell(r5)<<'\n';    
+    //std::bitset<16> zr5(r5);
+    //cout<<"16 bitsof input r5: "<<zr5<<'\n';
+    //cout<<"r1 after: "<<display_cell(r5)<<'\n';    
     mod9_carry_bit= mod_digit(r5);
-    cout<<"r5 after: "<<display_cell(r5)<<'\n';     
+    //cout<<"r5 after: "<<display_cell(r5)<<'\n';     
     carry=(raux>>4) +mod9_carry_bit;
-    std::bitset<16> zrr5(carry);
-    cout<<"16 bitsof input carry5: "<<zrr5<<'\n';    
-    cout<<"c0_5: "<<display_cell(carry)<<'\n'; 
-    cout<<'\n';     
+    //std::bitset<16> zrr5(carry);
+    //cout<<"16 bitsof input carry5: "<<zrr5<<'\n';    
+    //cout<<"c0_5: "<<display_cell(carry)<<'\n'; 
+    //cout<<'\n';     
 
     r6=a1*b2+carry;
     raux=r6;
-    std::bitset<16> zr6(r6);
-    cout<<"16 bitsof input r6: "<<zr6<<'\n';
-    cout<<"r1 after: "<<display_cell(r6)<<'\n';    
+    //std::bitset<16> zr6(r6);
+    //cout<<"16 bitsof input r6: "<<zr6<<'\n';
+    //cout<<"r1 after: "<<display_cell(r6)<<'\n';    
     mod9_carry_bit= mod_digit(r6);
-    cout<<"r6 after: "<<display_cell(r6)<<'\n';     
+    //cout<<"r6 after: "<<display_cell(r6)<<'\n';     
     carry=(raux>>4) +mod9_carry_bit;
-    std::bitset<16> zrr6(carry);
-    cout<<"16 bitsof input carry6: "<<zrr6<<'\n';    
-    cout<<"c0_6: "<<display_cell(carry)<<'\n'; 
-    cout<<'\n';     
+    //std::bitset<16> zrr6(carry);
+    //cout<<"16 bitsof input carry6: "<<zrr6<<'\n';    
+    //cout<<"c0_6: "<<display_cell(carry)<<'\n'; 
+    //cout<<'\n';     
 
     //add carry aux form last round
     r7=a1*b3+carry;//+carry_aux;
-    std::bitset<16> zr7(r7);
-    cout<<"16 bitsof input r7: "<<zr7<<'\n';
-    cout<<"r1 after: "<<display_cell(r7)<<'\n';    
+    //std::bitset<16> zr7(r7);
+    //cout<<"16 bitsof input r7: "<<zr7<<'\n';
+    //cout<<"r1 after: "<<display_cell(r7)<<'\n';    
     raux=r7;
     mod9_carry_bit= mod_digit(r7);
-    cout<<"r7 after: "<<display_cell(r7)<<'\n';     
+    //cout<<"r7 after: "<<display_cell(r7)<<'\n';     
     carry=(raux>>4) +mod9_carry_bit; 
-     std::bitset<16> zrr7(carry);
-    cout<<"16 bitsof input carry7: "<<zrr7<<'\n';    
-    cout<<"c0_6: "<<display_cell(carry)<<'\n'; 
-    cout<<'\n';
+    // std::bitset<16> zrr7(carry);
+    //cout<<"16 bitsof input carry7: "<<zrr7<<'\n';    
+    //cout<<"c0_6: "<<display_cell(carry)<<'\n'; 
+    //cout<<'\n';
     
     r7+=carry_aux;
-    cout<<"r7 after carry aux: "<<display_cell(r7)<<'\n';     
+    //cout<<"r7 after carry aux: "<<display_cell(r7)<<'\n';     
     raux=r7;
     mod9_carry_bit=mod_digit(r7);
     carry+=mod9_carry_bit;
-    std::bitset<16> zrr7_(carry);
-    cout<<"16 bitsof input carry7_: "<<zrr7_<<'\n';    
-    cout<<"c0_6: "<<display_cell(carry)<<'\n'; 
-    cout<<'\n';    
+    //std::bitset<16> zrr7_(carry);
+    //cout<<"16 bitsof input carry7_: "<<zrr7_<<'\n';    
+    //cout<<"c0_6: "<<display_cell(carry)<<'\n'; 
+    //cout<<'\n';    
 
     carry_aux=carry; 
     //finished second round
 
     r8=a2*b0;
-    std::bitset<16> zr8(r8);
-    cout<<"16 bitsof input r8: "<<zr8<<'\n';
-    cout<<"r1 after: "<<display_cell(r8)<<'\n';    
+    //std::bitset<16> zr8(r8);
+    //cout<<"16 bitsof input r8: "<<zr8<<'\n';
+    //cout<<"r1 after: "<<display_cell(r8)<<'\n';    
     raux=r8;
     mod9_carry_bit= mod_digit(r8);
-    cout<<"r8 after: "<<display_cell(r8)<<'\n';     
+    //cout<<"r8 after: "<<display_cell(r8)<<'\n';     
     carry=(raux>>4) +mod9_carry_bit;
-     std::bitset<16> zrr8(carry);
-    cout<<"16 bitsof input carry8: "<<zrr8<<'\n';    
-    cout<<"c0_6: "<<display_cell(carry)<<'\n'; 
-    cout<<'\n'; 
+    // std::bitset<16> zrr8(carry);
+    //cout<<"16 bitsof input carry8: "<<zrr8<<'\n';    
+    //cout<<"c0_6: "<<display_cell(carry)<<'\n'; 
+    //cout<<'\n'; 
 
     r9=a2*b1+carry;
-    std::bitset<16> zr9(r9);
-    cout<<"16 bitsof input r9: "<<zr9<<'\n';
-    cout<<"r1 after: "<<display_cell(r9)<<'\n';        
+    //std::bitset<16> zr9(r9);
+    //cout<<"16 bitsof input r9: "<<zr9<<'\n';
+    //cout<<"r1 after: "<<display_cell(r9)<<'\n';        
     raux=r9;
     mod9_carry_bit= mod_digit(r9);
-    cout<<"r9 after: "<<display_cell(r9)<<'\n';     
+    //cout<<"r9 after: "<<display_cell(r9)<<'\n';     
     carry=(raux>>4) +mod9_carry_bit;
-     std::bitset<16> zrr9(carry);
-    cout<<"16 bitsof input carry9: "<<zrr9<<'\n';    
-    cout<<"c0_6: "<<display_cell(carry)<<'\n'; 
-    cout<<'\n';     
+    // std::bitset<16> zrr9(carry);
+    //cout<<"16 bitsof input carry9: "<<zrr9<<'\n';    
+    //cout<<"c0_6: "<<display_cell(carry)<<'\n'; 
+    //cout<<'\n';     
 
     r10=a2*b2+carry;
-    std::bitset<16> zr10(r10);
-    cout<<"16 bitsof input r10: "<<zr10<<'\n';
-    cout<<"r1 after: "<<display_cell(r10)<<'\n';    
+    //std::bitset<16> zr10(r10);
+    //cout<<"16 bitsof input r10: "<<zr10<<'\n';
+    //cout<<"r1 after: "<<display_cell(r10)<<'\n';    
     raux=r10;
     mod9_carry_bit= mod_digit(r10);
-    cout<<"r10 after: "<<display_cell(r10)<<'\n';     
+    //cout<<"r10 after: "<<display_cell(r10)<<'\n';     
     carry=(raux>>4) +mod9_carry_bit;
-    std::bitset<16> zrr10(carry);
-    cout<<"16 bitsof input carry10: "<<zrr10<<'\n';    
-    cout<<"c0_6: "<<display_cell(carry)<<'\n'; 
-    cout<<'\n'; 
+    //std::bitset<16> zrr10(carry);
+    //cout<<"16 bitsof input carry10: "<<zrr10<<'\n';    
+    //cout<<"c0_6: "<<display_cell(carry)<<'\n'; 
+    //cout<<'\n'; 
 
     //add carry aux form last round
     r11=a2*b3+carry+carry_aux;
-    std::bitset<16> zr11(r11);
-    cout<<"16 bitsof input r11: "<<zr11<<'\n';
-    cout<<"r1 after: "<<display_cell(r11)<<'\n';    
+    //std::bitset<16> zr11(r11);
+    //cout<<"16 bitsof input r11: "<<zr11<<'\n';
+    //cout<<"r1 after: "<<display_cell(r11)<<'\n';    
     raux=r11;
     mod9_carry_bit= mod_digit(r11);
-    cout<<"r11 after: "<<display_cell(r11)<<'\n';     
+    //cout<<"r11 after: "<<display_cell(r11)<<'\n';     
     carry=(raux>>4) +mod9_carry_bit;
-    std::bitset<16> zrr11(carry);
-    cout<<"16 bitsof input carry11: "<<zrr11<<'\n';    
-    cout<<"c0_6: "<<display_cell(carry)<<'\n'; 
-    cout<<'\n';      
+    //std::bitset<16> zrr11(carry);
+    //cout<<"16 bitsof input carry11: "<<zrr11<<'\n';    
+    //cout<<"c0_6: "<<display_cell(carry)<<'\n'; 
+    //cout<<'\n';      
 
     carry_aux=carry;
 
     r12=a3*b0;
-    std::bitset<16> zr12(r12);
-    cout<<"16 bitsof input r11: "<<zr12<<'\n';
-    cout<<"r1 after: "<<display_cell(r12)<<'\n';    
+    //std::bitset<16> zr12(r12);
+    //cout<<"16 bitsof input r11: "<<zr12<<'\n';
+    //cout<<"r1 after: "<<display_cell(r12)<<'\n';    
     raux=r12;
     mod9_carry_bit= mod_digit(r12);
-    cout<<"r12 after: "<<display_cell(r12)<<'\n'; 
+    //cout<<"r12 after: "<<display_cell(r12)<<'\n'; 
     carry=(raux>>4) +mod9_carry_bit;
-    std::bitset<16> zrr12(carry);
-    cout<<"16 bitsof input carry12: "<<zrr12<<'\n';    
-    cout<<"c0_6: "<<display_cell(carry)<<'\n'; 
-    cout<<'\n';    
+    //std::bitset<16> zrr12(carry);
+    //cout<<"16 bitsof input carry12: "<<zrr12<<'\n';    
+    //cout<<"c0_6: "<<display_cell(carry)<<'\n'; 
+    //cout<<'\n';    
 
     r13=a3*b1+carry;
-    std::bitset<16> zr13(r13);
-    cout<<"16 bitsof input r13: "<<zr13<<'\n';
-    cout<<"r1 after: "<<display_cell(r13)<<'\n';     
+    //std::bitset<16> zr13(r13);
+    //cout<<"16 bitsof input r13: "<<zr13<<'\n';
+    //cout<<"r1 after: "<<display_cell(r13)<<'\n';     
     raux=r13;
     mod9_carry_bit= mod_digit(r13);
-    cout<<"r13 after: "<<display_cell(r13)<<'\n';     
+    //cout<<"r13 after: "<<display_cell(r13)<<'\n';     
     carry=(raux>>4) +mod9_carry_bit;
-    std::bitset<16> zrr13(carry);
-    cout<<"16 bitsof input carry13: "<<zrr13<<'\n';    
-    cout<<"c0_6: "<<display_cell(carry)<<'\n'; 
-    cout<<'\n';
+    //std::bitset<16> zrr13(carry);
+    //cout<<"16 bitsof input carry13: "<<zrr13<<'\n';    
+    //cout<<"c0_6: "<<display_cell(carry)<<'\n'; 
+    //cout<<'\n';
 
     r14=a3*b2+carry;
-    std::bitset<16> zr14(r14);
-    cout<<"16 bitsof input r14: "<<zr14<<'\n';
-    cout<<"r1 after: "<<display_cell(r14)<<'\n';    
+    //std::bitset<16> zr14(r14);
+    //cout<<"16 bitsof input r14: "<<zr14<<'\n';
+    //cout<<"r1 after: "<<display_cell(r14)<<'\n';    
     raux=r14;
     mod9_carry_bit= mod_digit(r14);
-    cout<<"r14 after: "<<display_cell(r14)<<'\n';     
+    //cout<<"r14 after: "<<display_cell(r14)<<'\n';     
     carry=(raux>>4) +mod9_carry_bit;
-    std::bitset<16> zrr14(carry);
-    cout<<"16 bitsof input carry14: "<<zrr14<<'\n';    
-    cout<<"c0_6: "<<display_cell(carry)<<'\n'; 
-    cout<<'\n';    
+    //std::bitset<16> zrr14(carry);
+    //cout<<"16 bitsof input carry14: "<<zrr14<<'\n';    
+    //cout<<"c0_6: "<<display_cell(carry)<<'\n'; 
+    //cout<<'\n';    
 
     //add carry aux form last round
     r15=a3*b3+carry+carry_aux;
-    std::bitset<16> zr15(r15);
-    cout<<"16 bitsof input r15: "<<zr15<<'\n';
-    cout<<"r1 after: "<<display_cell(r15)<<'\n';    
+    //std::bitset<16> zr15(r15);
+    //cout<<"16 bitsof input r15: "<<zr15<<'\n';
+    //cout<<"r1 after: "<<display_cell(r15)<<'\n';    
     raux=r15;
     mod9_carry_bit= mod_digit(r15);
-    cout<<"r15 after: "<<display_cell(r15)<<'\n';     
+    //cout<<"r15 after: "<<display_cell(r15)<<'\n';     
     carry=(raux>>4) +mod9_carry_bit;
-    std::bitset<16> zrr15(carry);
-    cout<<"16 bitsof input carry15: "<<zrr15<<'\n';    
-    cout<<"c0_6: "<<display_cell(carry)<<'\n'; 
-    cout<<'\n';     
+    //std::bitset<16> zrr15(carry);
+    //cout<<"16 bitsof input carry15: "<<zrr15<<'\n';    
+    //cout<<"c0_6: "<<display_cell(carry)<<'\n'; 
+    //cout<<'\n';     
 
     carry_aux=carry;
 
@@ -547,44 +539,4 @@ uint16_t getCarry_2(uint32_t ca){
     //cout<<cr<<'\n';
     //cout<<cr+(uint16_t) ca<<'\n';
     return c;
-}
-
-
-int main() {
-    //string a,b;
-    //cin>>a>>b;
-    //printhuge(mult(a,b));
-    //return 0;
-    string a,b;
-    cin>>a>>b;
-    uint16_t r;
-    uint16_t c=encoded_naive_mul(num(a),num(b),0,r);
-    cout<<"resut: "<<display_cell(r)<<'\n';
-    cout<<"carry: "<<display_cell(c)<<'\n';
-
-
-    //vector<uint16_t>n1= inputToVector(a);
-    //vector<uint16_t>n2=inputToVector(b);
-    //vector<uint16_t>r=mul_1(n1,n2);
-    //cout<<vector_decode(r);
-    //cout<<"string to number: "<<num(a)<<'\n';
-    //cout<<"number to string: "<<display_cell(num(a))<<'\n';
-    //uint16_t r=carry(num(a),num(a));
-    //cout<<display_cell(r)<<'\n';
-
-    //uint16_t result;
-    //uint16_t carry_1;
-    //carry_1=encoded_naive_mul(num(a),num(a),0,result);
-    //cout<<"decode result: "<<display_cell(result)<<'\n';
-    //cout<<"decode carry: "<<display_cell(carry_1)<<'\n';
-    //cout<<getCarry_2(r)<<'\n';
-    ////cout<<r+getCarry_2(r)<<'\n';
-//
-//
-//    //cout<<"big or little endian? "<<'\n';
-//    //unsigned int x = 1;
-//    //int result=(int) (((char *)&x)[0]);
-    //cout<<result<<'\n' ;
-
-    return 0;
 }
