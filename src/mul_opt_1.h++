@@ -84,7 +84,8 @@ uint16_t encoded_naive_mul(uint16_t a, uint16_t b, uint16_t carry_bit, uint16_t 
     //15;//0b0000000000001111
     //240;//0b0000000011110000
     //3840;//0b0000111100000000
-
+    //need this to be sure result is null;
+    //result&=0;
     //used to carry between nibbles; as they are encoded 0-9; everything else is overflow    
     uint16_t carry;
     uint16_t carry_aux;
@@ -98,7 +99,7 @@ uint16_t encoded_naive_mul(uint16_t a, uint16_t b, uint16_t carry_bit, uint16_t 
     uint16_t b3=(b>>12);//first nibble;
     uint16_t b2=(b&3840)>>8;
     uint16_t b1=(b&240)>>4;
-    uint16_t b0=(b&15);//4th nibble;      somehow b has an extra char at the end
+    uint16_t b0=(b&15);//4th nibble;      somehow b has an extra char at the end sometimes
 
     uint16_t mod9_carry_bit;
 
@@ -140,287 +141,142 @@ uint16_t encoded_naive_mul(uint16_t a, uint16_t b, uint16_t carry_bit, uint16_t 
        c4 r15 r14 r13| r12     
     */
 
-    //last digit multiplication with everybody
-
-    //std::bitset<16> aa(a);
-    //cout<<"16 bitsof input a: "<<aa<<'\n';
-//
-//    //std::bitset<16> bb(b);
-//    //cout<<"16 bitsof input b: "<<bb<<'\n';
-//
-//    //cout<<"a0 before: "<<display_cell(a0)<<'\n';
-    //cout<<"b0 before: "<<display_cell(b0)<<'\n';
     r0=a0*b0;
-    //std::bitset<16> zr(r0);
-    //cout<<"16 bitsof input zr: "<<zr<<'\n';
-    //cout<<"r0 before: "<<display_cell(r0)<<'\n';
     //check if nibble is lower than 9
     raux=r0;
-    mod9_carry_bit= mod_digit(r0);
-    //cout<<"r0 after: "<<display_cell(r0)<<'\n';    
-    carry=(((raux>>4))) +mod9_carry_bit;
-    //std::bitset<16> zrr(carry);
-    //cout<<"16 bitsof input carry: "<<zrr<<'\n';    
-    //cout<<"c0_1: "<<display_cell(carry)<<'\n';
-    //cout<<'\n'; 
+    mod9_carry_bit= mod_digit(r0);   
+    carry=mod9_carry_bit; 
     //end of first multiplication;
 
-    //works fine untill here
 
-    r1=a0*b1 + carry;
-    //std::bitset<16> zr1(r1);
-    //cout<<"16 bitsof input r1: "<<zr1<<'\n';
-    //cout<<"r1 after: "<<display_cell(r1)<<'\n';     
+    r1=a0*b1 + carry;    
     raux=r1;
-    mod9_carry_bit= mod_digit(r1);
-    //cout<<"r1 after: "<<display_cell(r1)<<'\n';     
-    carry=(raux>>4) +mod9_carry_bit;
-    //std::bitset<16> zrr1(carry);
-    //cout<<"16 bitsof input carry1: "<<zrr1<<'\n';    
-    //cout<<"c0_2: "<<display_cell(carry)<<'\n'; 
-    //cout<<'\n';    
+    mod9_carry_bit= mod_digit(r1);    
+    carry=mod9_carry_bit;
 
-    r2=a0*b2+carry;
-    //std::bitset<16> zr2(r2);
-    //cout<<"16 bitsof input r2: "<<zr2<<'\n';
-    //cout<<"r2 after: "<<display_cell(r1)<<'\n';    
+    r2=a0*b2+carry;    
     raux=r2;
-    mod9_carry_bit= mod_digit(r2);
-    //cout<<"r2 after: "<<display_cell(r2)<<'\n';     
-    carry=(raux>>4) +mod9_carry_bit;
-    //std::bitset<16> zrr2(carry);
-    //cout<<"16 bitsof input carry1: "<<zrr1<<'\n';    
-    //cout<<"c0_2: "<<display_cell(carry)<<'\n'; 
-    //cout<<'\n';    
+    mod9_carry_bit= mod_digit(r2);     
+    carry=mod9_carry_bit;    
 
-    r3=a0*b3+carry;
-    //std::bitset<16> zr3(r3);
-    //cout<<"16 bitsof input r3: "<<zr3<<'\n';
-    //cout<<"r1 after: "<<display_cell(r1)<<'\n';    
+    r3=a0*b3+carry;    
     raux=r3;
-    mod9_carry_bit= mod_digit(r3);
-    //cout<<"r3 after: "<<display_cell(r3)<<'\n';     
-    carry=(raux>>4) +mod9_carry_bit;
-    //std::bitset<16> zrr3(carry);
-    //cout<<"16 bitsof input carry3: "<<zrr3<<'\n';    
-    //cout<<"c0_3: "<<display_cell(carry)<<'\n';
-    //cout<<'\n';     
+    mod9_carry_bit= mod_digit(r3);    
+    carry=mod9_carry_bit;     
 
     carry_aux=carry;//last nibble
     //finished first multiplication round; O(4*5)=O(20)
 
-    //we update carry_aux at the 3rd(last nibble) and 4th(2nd to last nibble) operation
+    //we update carry_aux at the 3rd(last nibble) and 4th(2nd to last nibble) operation    
     r4=a1*b0;
-    //std::bitset<16> zr4(r4);
-    //cout<<"16 bitsof input r4: "<<zr4<<'\n';
-    //cout<<"r1 after: "<<display_cell(r4)<<'\n';     
     raux=r4;
-    mod9_carry_bit= mod_digit(r4);
-    //cout<<"r4 after: "<<display_cell(r4)<<'\n';     
-    carry=(raux>>4) +mod9_carry_bit;
-    //std::bitset<16> zrr4(carry);
-    //cout<<"16 bitsof input carry4: "<<zrr4<<'\n';    
-    //cout<<"c0_4: "<<display_cell(carry)<<'\n'; 
-    //cout<<'\n';     
+    mod9_carry_bit= mod_digit(r4);     
+    carry=mod9_carry_bit;     
 
     r5=a1*b1+carry;
-
-    raux=r5;
-    //std::bitset<16> zr5(r5);
-    //cout<<"16 bitsof input r5: "<<zr5<<'\n';
-    //cout<<"r1 after: "<<display_cell(r5)<<'\n';    
-    mod9_carry_bit= mod_digit(r5);
-    //cout<<"r5 after: "<<display_cell(r5)<<'\n';     
-    carry=(raux>>4) +mod9_carry_bit;
-    //std::bitset<16> zrr5(carry);
-    //cout<<"16 bitsof input carry5: "<<zrr5<<'\n';    
-    //cout<<"c0_5: "<<display_cell(carry)<<'\n'; 
-    //cout<<'\n';     
+    raux=r5;   
+    mod9_carry_bit= mod_digit(r5);     
+    carry=mod9_carry_bit;    
 
     r6=a1*b2+carry;
-    raux=r6;
-    //std::bitset<16> zr6(r6);
-    //cout<<"16 bitsof input r6: "<<zr6<<'\n';
-    //cout<<"r1 after: "<<display_cell(r6)<<'\n';    
-    mod9_carry_bit= mod_digit(r6);
-    //cout<<"r6 after: "<<display_cell(r6)<<'\n';     
-    carry=(raux>>4) +mod9_carry_bit;
-    //std::bitset<16> zrr6(carry);
-    //cout<<"16 bitsof input carry6: "<<zrr6<<'\n';    
-    //cout<<"c0_6: "<<display_cell(carry)<<'\n'; 
-    //cout<<'\n';     
+    raux=r6;    
+    mod9_carry_bit= mod_digit(r6);     
+    carry=mod9_carry_bit;     
 
     //add carry aux form last round
-    r7=a1*b3+carry;//+carry_aux;
-    //std::bitset<16> zr7(r7);
-    //cout<<"16 bitsof input r7: "<<zr7<<'\n';
-    //cout<<"r1 after: "<<display_cell(r7)<<'\n';    
+    r7=a1*b3+carry+carry_aux;//+carry_aux;    
     raux=r7;
-    mod9_carry_bit= mod_digit(r7);
-    //cout<<"r7 after: "<<display_cell(r7)<<'\n';     
-    carry=(raux>>4) +mod9_carry_bit; 
-    // std::bitset<16> zrr7(carry);
-    //cout<<"16 bitsof input carry7: "<<zrr7<<'\n';    
-    //cout<<"c0_6: "<<display_cell(carry)<<'\n'; 
-    //cout<<'\n';
-    
-    r7+=carry_aux;
-    //cout<<"r7 after carry aux: "<<display_cell(r7)<<'\n';     
-    raux=r7;
-    mod9_carry_bit=mod_digit(r7);
-    carry+=mod9_carry_bit;
-    //std::bitset<16> zrr7_(carry);
-    //cout<<"16 bitsof input carry7_: "<<zrr7_<<'\n';    
-    //cout<<"c0_6: "<<display_cell(carry)<<'\n'; 
-    //cout<<'\n';    
+    mod9_carry_bit= mod_digit(r7);    
+    carry=mod9_carry_bit; 
 
     carry_aux=carry; 
     //finished second round
 
-    r8=a2*b0;
-    //std::bitset<16> zr8(r8);
-    //cout<<"16 bitsof input r8: "<<zr8<<'\n';
-    //cout<<"r1 after: "<<display_cell(r8)<<'\n';    
+    r8=a2*b0;    
     raux=r8;
-    mod9_carry_bit= mod_digit(r8);
-    //cout<<"r8 after: "<<display_cell(r8)<<'\n';     
-    carry=(raux>>4) +mod9_carry_bit;
-    // std::bitset<16> zrr8(carry);
-    //cout<<"16 bitsof input carry8: "<<zrr8<<'\n';    
-    //cout<<"c0_6: "<<display_cell(carry)<<'\n'; 
-    //cout<<'\n'; 
+    mod9_carry_bit= mod_digit(r8);    
+    carry=mod9_carry_bit;
 
-    r9=a2*b1+carry;
-    //std::bitset<16> zr9(r9);
-    //cout<<"16 bitsof input r9: "<<zr9<<'\n';
-    //cout<<"r1 after: "<<display_cell(r9)<<'\n';        
+    r9=a2*b1+carry;        
     raux=r9;
-    mod9_carry_bit= mod_digit(r9);
-    //cout<<"r9 after: "<<display_cell(r9)<<'\n';     
-    carry=(raux>>4) +mod9_carry_bit;
-    // std::bitset<16> zrr9(carry);
-    //cout<<"16 bitsof input carry9: "<<zrr9<<'\n';    
-    //cout<<"c0_6: "<<display_cell(carry)<<'\n'; 
-    //cout<<'\n';     
+    mod9_carry_bit= mod_digit(r9);     
+    carry=mod9_carry_bit;     
 
-    r10=a2*b2+carry;
-    //std::bitset<16> zr10(r10);
-    //cout<<"16 bitsof input r10: "<<zr10<<'\n';
-    //cout<<"r1 after: "<<display_cell(r10)<<'\n';    
+    r10=a2*b2+carry;   
     raux=r10;
-    mod9_carry_bit= mod_digit(r10);
-    //cout<<"r10 after: "<<display_cell(r10)<<'\n';     
-    carry=(raux>>4) +mod9_carry_bit;
-    //std::bitset<16> zrr10(carry);
-    //cout<<"16 bitsof input carry10: "<<zrr10<<'\n';    
-    //cout<<"c0_6: "<<display_cell(carry)<<'\n'; 
-    //cout<<'\n'; 
+    mod9_carry_bit= mod_digit(r10);     
+    carry=mod9_carry_bit; 
 
     //add carry aux form last round
-    r11=a2*b3+carry+carry_aux;
-    //std::bitset<16> zr11(r11);
-    //cout<<"16 bitsof input r11: "<<zr11<<'\n';
-    //cout<<"r1 after: "<<display_cell(r11)<<'\n';    
+    r11=a2*b3+carry+carry_aux;   
     raux=r11;
-    mod9_carry_bit= mod_digit(r11);
-    //cout<<"r11 after: "<<display_cell(r11)<<'\n';     
-    carry=(raux>>4) +mod9_carry_bit;
-    //std::bitset<16> zrr11(carry);
-    //cout<<"16 bitsof input carry11: "<<zrr11<<'\n';    
-    //cout<<"c0_6: "<<display_cell(carry)<<'\n'; 
-    //cout<<'\n';      
+    mod9_carry_bit= mod_digit(r11);     
+    carry=mod9_carry_bit; 
 
     carry_aux=carry;
 
-    r12=a3*b0;
-    //std::bitset<16> zr12(r12);
-    //cout<<"16 bitsof input r11: "<<zr12<<'\n';
-    //cout<<"r1 after: "<<display_cell(r12)<<'\n';    
+    r12=a3*b0;    
     raux=r12;
-    mod9_carry_bit= mod_digit(r12);
-    //cout<<"r12 after: "<<display_cell(r12)<<'\n'; 
-    carry=(raux>>4) +mod9_carry_bit;
-    //std::bitset<16> zrr12(carry);
-    //cout<<"16 bitsof input carry12: "<<zrr12<<'\n';    
-    //cout<<"c0_6: "<<display_cell(carry)<<'\n'; 
-    //cout<<'\n';    
+    mod9_carry_bit= mod_digit(r12); 
+    carry=mod9_carry_bit;   
 
-    r13=a3*b1+carry;
-    //std::bitset<16> zr13(r13);
-    //cout<<"16 bitsof input r13: "<<zr13<<'\n';
-    //cout<<"r1 after: "<<display_cell(r13)<<'\n';     
+    r13=a3*b1+carry;    
     raux=r13;
-    mod9_carry_bit= mod_digit(r13);
-    //cout<<"r13 after: "<<display_cell(r13)<<'\n';     
-    carry=(raux>>4) +mod9_carry_bit;
-    //std::bitset<16> zrr13(carry);
-    //cout<<"16 bitsof input carry13: "<<zrr13<<'\n';    
-    //cout<<"c0_6: "<<display_cell(carry)<<'\n'; 
-    //cout<<'\n';
+    mod9_carry_bit= mod_digit(r13);    
+    carry=mod9_carry_bit;
 
     r14=a3*b2+carry;
-    //std::bitset<16> zr14(r14);
-    //cout<<"16 bitsof input r14: "<<zr14<<'\n';
-    //cout<<"r1 after: "<<display_cell(r14)<<'\n';    
     raux=r14;
-    mod9_carry_bit= mod_digit(r14);
-    //cout<<"r14 after: "<<display_cell(r14)<<'\n';     
-    carry=(raux>>4) +mod9_carry_bit;
-    //std::bitset<16> zrr14(carry);
-    //cout<<"16 bitsof input carry14: "<<zrr14<<'\n';    
-    //cout<<"c0_6: "<<display_cell(carry)<<'\n'; 
-    //cout<<'\n';    
+    mod9_carry_bit= mod_digit(r14);    
+    carry=mod9_carry_bit;    
 
     //add carry aux form last round
-    r15=a3*b3+carry+carry_aux;
-    //std::bitset<16> zr15(r15);
-    //cout<<"16 bitsof input r15: "<<zr15<<'\n';
-    //cout<<"r1 after: "<<display_cell(r15)<<'\n';    
+    r15=a3*b3+carry+carry_aux;//+carry_aux; 
     raux=r15;
-    mod9_carry_bit= mod_digit(r15);
-    //cout<<"r15 after: "<<display_cell(r15)<<'\n';     
-    carry=(raux>>4) +mod9_carry_bit;
-    //std::bitset<16> zrr15(carry);
-    //cout<<"16 bitsof input carry15: "<<zrr15<<'\n';    
-    //cout<<"c0_6: "<<display_cell(carry)<<'\n'; 
-    //cout<<'\n';     
+    mod9_carry_bit= mod_digit(r15);     
+    carry=mod9_carry_bit;
+       
 
     carry_aux=carry;
 
     //finished all rounds; now must update result; and carry;
+   
+//1
     result=r0;//unit digit
     //use r0 as aux space;
-    r0=r1+r4;
+//2    
+    r0=r1+r4;    
     raux=r0;
-    mod9_carry_bit= mod_digit(r0);
-    carry=(raux>>4) +mod9_carry_bit;
+    mod9_carry_bit= mod_digit(r0); 
+    carry=mod9_carry_bit;
     result+= (r0<<4); //10th order digit
 
-    r0=r2+r5+r7+carry;
-    raux=r0;
-    mod9_carry_bit= mod_digit(r0);
-    carry=(raux>>4) +mod9_carry_bit;
-    result+= (r0<<8); //100th order digit
+//3
 
-    r0=r3+r6+r9+r12+carry;
+    r0=r2+r5+r8+carry;     
     raux=r0;
-    mod9_carry_bit= mod_digit(r0);
-    carry=(raux>>4) +mod9_carry_bit;
+    mod9_carry_bit= mod_digit(r0);     
+    carry=mod9_carry_bit;
+    result+= (r0<<8); //100th order digit
+//4
+    r0=r3+r6+r9+r12+carry; 
+    raux=r0;
+    mod9_carry_bit= mod_digit(r0); 
+    carry=mod9_carry_bit;
     result+= (r0<<12); //1000th order digit  
 
 
     //computing carry;
-
-    carry_result=r7+r10+r13;     
+    carry_result=r7+r10+r13+carry;     
     raux=carry_result;
     mod9_carry_bit=mod_digit(carry_result);//rightmost digit of carry
-    carry=(raux>>4)+ mod9_carry_bit;
+    carry= mod9_carry_bit;
 
     //now use r7 as aux space for computation
     r7=r11+r14+carry;
     raux=r7;
     mod9_carry_bit=mod_digit(r7);
-    carry=(raux>>4)+ mod9_carry_bit;
+    carry=mod9_carry_bit;
     carry_result+= (r7<<4);//2-rightmost digits
 
     r7=r15+carry;
@@ -434,7 +290,10 @@ uint16_t encoded_naive_mul(uint16_t a, uint16_t b, uint16_t carry_bit, uint16_t 
     mod9_carry_bit=mod_digit(r7);
     //there exists no more carry
     carry_result+= (r7<<12);//2-rightmost digits
+
+    return carry_result;
 }
+
 
 //input 1 digit as uint16_t; returns carry 1 or 0;
 uint16_t digit_check(uint16_t &x){
