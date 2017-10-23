@@ -51,7 +51,8 @@ string display_cell(uint16_t cell){
     char c2='0'+(((cell & _8mask)>>4));
     char c3='0'+((cell & _12mask));
     char arr[]={c0,c1,c2,c3};
-    string res_s=string((char *) &arr);
+    //string res_s=string((char *) &arr);
+    string res_s=string()+c0+c1+c2+c3;
     return res_s;
 }
 
@@ -85,7 +86,8 @@ uint16_t encoded_naive_mul(uint16_t a, uint16_t b, uint16_t carry_bit, uint16_t 
     //15;//0b0000000000001111
     //240;//0b0000000011110000
     //3840;//0b0000111100000000
-
+    //need this to be sure result is null;
+    result&=0;
     //used to carry between nibbles; as they are encoded 0-9; everything else is overflow    
     uint16_t carry;
     uint16_t carry_aux;
@@ -99,7 +101,7 @@ uint16_t encoded_naive_mul(uint16_t a, uint16_t b, uint16_t carry_bit, uint16_t 
     uint16_t b3=(b>>12);//first nibble;
     uint16_t b2=(b&3840)>>8;
     uint16_t b1=(b&240)>>4;
-    uint16_t b0=(b&15);//4th nibble;      somehow b has an extra char at the end
+    uint16_t b0=(b&15);//4th nibble;      somehow b has an extra char at the end sometimes
 
     uint16_t mod9_carry_bit;
 
@@ -524,6 +526,76 @@ string vector_decode(vector<uint16_t> r){
     return s;
 }
 
+//input 1 digit as uint16_t; returns carry 1 or 0;
+uint16_t digit_check(uint16_t &x){
+    if(x<=9){
+        return 0;
+    }
+    else{
+        x-=10;
+        return 1;
+    }
+}
+//returns carry 1 or 0, result is parameter;
+bool cell_add(uint16_t a, uint16_t b, bool prev_carry, uint16_t &res){
+    res&=0;
+    uint16_t c1;
+    uint16_t a3=(a>>12);//first nibbles   somehow a dispaly correctly;
+    uint16_t a2=(a&3840)>>8;//2nd nibble
+    uint16_t a1=(a&240)>>4;//3rd nibble
+    uint16_t a0=(a&15);//4th nibble
+
+    uint16_t b3=(b>>12);//first nibble;
+    uint16_t b2=(b&3840)>>8;
+    uint16_t b1=(b&240)>>4;
+    uint16_t b0=(b&15);//4th nibble;      somehow b has an extra char at the end sometimes
+
+
+    a0+= (b0 + (uint16_t)(prev_carry? 1 : 0));
+    c1=digit_check(a0);
+    a1+=(b1+c1);
+    c1=digit_check(a1);
+    a2+=(b2+c1);
+    c1=digit_check(a2);
+    a3+=(b3+c1);
+    c1=digit_check(a3);
+    res=a0+(a1<<4)+(a2<<8)+(a3<<12);
+    return c1;
+
+}
+//does inplace digit substraction
+bool negative_check(uint16_t &a, uint16_t b, bool carry){
+    b+= uint16_t (carry? 1:0);
+    if(a>= (uint16_t)b){
+        a-=b;
+        return false;
+    }else{
+        a=(uint16_t) (a+10-b);
+        return true;
+    }
+}
+//returns carry 1 or 0
+bool cell_substract(uint16_t a, uint16_t b, bool prev_carry, uint16_t &res){
+    bool c1;
+    uint16_t a3=(a>>12);//first nibbles   somehow a dispaly correctly;
+    uint16_t a2=(a&3840)>>8;//2nd nibble
+    uint16_t a1=(a&240)>>4;//3rd nibble
+    uint16_t a0=(a&15);//4th nibble
+
+    uint16_t b3=(b>>12);//first nibble;
+    uint16_t b2=(b&3840)>>8;
+    uint16_t b1=(b&240)>>4;
+    uint16_t b0=(b&15);//4th nibble;      somehow b has an extra char at the end sometimes
+
+    c1=negative_check(a0,b0,prev_carry);
+    c1=negative_check(a1,b1,c1);
+    c1=negative_check(a2,b2,c1);
+    c1=negative_check(a3,b3,c1);
+    res=a0+(a1<<4)+(a2<<8)+(a3<<12);
+    return c1;
+
+};
+
 
 //std::vector<int> readStringToInt(string a, string b){
 //
@@ -558,9 +630,9 @@ int main() {
     string a,b;
     cin>>a>>b;
     uint16_t r;
-    uint16_t c=encoded_naive_mul(num(a),num(b),0,r);
-    cout<<"resut: "<<display_cell(r)<<'\n';
-    cout<<"carry: "<<display_cell(c)<<'\n';
+    bool c=cell_substract(num(a),num(b),true,r);
+    cout<<"resut: "<<display_cell(r)<<' '<<'\n';
+    cout<<"carry: "<<c<<'\n';
 
 
     //vector<uint16_t>n1= inputToVector(a);
