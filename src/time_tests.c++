@@ -1,8 +1,8 @@
-//#if not defined(MAXSIZE)
-//#define MAXSIZE 120000 // 120000 max size that works atm
-//#endif
+#if not defined(MAXSIZE)
+#define MAXSIZE 120000 // 120000 max size that works atm
+#endif
 
-// #define REPETITIONS 3
+#define REPETITIONS 3
 
 #include <cstdlib> // std::atoi std:.rand
 #include <cmath> // std::sqrt
@@ -34,36 +34,36 @@ string generate(int m) {
   return res;
 }
 
-//void usage(char const* program) {
-//  std::cerr << "Usage: " << program << " <N>\n";
-//  exit(1);
-//}
+void usage(char const* program) {
+  std::cerr << "Usage: " << program << " <N>\n";
+  exit(1);
+}
 
 int main(int argc, char** argv) {
-  //unsigned long N = 15;
-  //if (argc == 2) {
-  //  N = std::atoi(argv[1]);
-  //}
-  //else {
-  //  usage(argv[0]);
-  //}
-  //if (N > MAXSIZE) {
-  //  std::cerr << "N out of bounds [0.." << MAXSIZE << "]\n";
-  //  usage(argv[0]);
-  //}
+  unsigned long N = 15;
+  if (argc == 2) {
+    N = std::atoi(argv[1]);
+  }
+  else {
+    usage(argv[0]);
+  }
+  if (N > MAXSIZE) {
+    std::cerr << "N out of bounds [0.." << MAXSIZE << "]\n";
+    usage(argv[0]);
+  }
   
 
   
-//#if defined(REPETITIONS)
-//  unsigned long const repetitions = REPETITIONS;
-//#else
-//  unsigned long const repetitions = MAXSIZE / N;
-//#endif
-unsigned long const repetitions=10;
+#if defined(REPETITIONS)
+  unsigned long const repetitions = REPETITIONS;
+#else
+  unsigned long const repetitions = MAXSIZE / N;
+#endif
+//unsigned long const repetitions=10;
 string a;
 string b;
 
-for (int i=0;i<120000;i+=100){
+for (int i=0;i<120000;i+=1000){
   a=generate(i);
   b=generate(i);
 

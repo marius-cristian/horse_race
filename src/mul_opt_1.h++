@@ -386,7 +386,7 @@ vector<uint16_t> inputToVector(string a){
                 break;
         default: break;
     }
-    cout<<"first debug: "<<first<<'\n';
+    //cout<<"first debug: "<<first<<'\n';
     int n=a.length()>>2;//division by 4, is shift by the power of 2^2;
     vector<uint16_t> result;
     result.push_back(num(first));
@@ -398,8 +398,8 @@ vector<uint16_t> inputToVector(string a){
 }
 
 vector<uint16_t> mul_1(vector<uint16_t> a, vector<uint16_t> b){
-    long i;
-    long j;
+    unsigned long i;
+    unsigned long j;
     vector<uint16_t> result;
     uint16_t carry;
     uint16_t inter_res;

@@ -413,6 +413,7 @@ vector<uint16_t> mul_1(vector<uint16_t> a, vector<uint16_t> b){
     long pos=0;
     bool create=true;
     bool add_carry=false;
+    uint16_t carry_aux;
     int k=0;
     for(i=(n-1);i>=0;i--){
         carry=0;
@@ -420,11 +421,16 @@ vector<uint16_t> mul_1(vector<uint16_t> a, vector<uint16_t> b){
         for(j=(m-1);j>=0;j--){
             k++;
             if(i==(n-1)){
+                carry_aux=carry;
                 carry=encoded_naive_mul(a[i],b[j],carry,inter_res);
+                (j==m-1)?cout<<display_cell(inter_res)<<" ;; "<<display_cell(carry)<<" ^^ "<<'\n':cout<<"-";
+                add_carry=cell_add(inter_res,carry_aux,add_carry,inter_res);
                 result.push_back(inter_res);    
             }
             else if(j==0){
+                carry_aux=carry;
                 carry=encoded_naive_mul(a[i],b[j],carry,inter_res);
+                add_carry=cell_add(inter_res,carry_aux,add_carry,inter_res);
                 result.push_back(inter_res);
                 result.push_back(carry);    
             }
@@ -473,7 +479,7 @@ int main() {
     vector<uint16_t>n1= inputToVector(a);
     vector<uint16_t>n2= inputToVector(b);
     vector<uint16_t>r=mul_1(n1,n2);
-    //cout<<vector_decode(r)<<'\n';
+    cout<<vector_decode(r)<<'\n';
     //cout<<"string to number: "<<num(a)<<'\n';
     //cout<<"number to string: "<<display_cell(num(a))<<'\n';
     //uint16_t r=carry(num(a),num(a));
@@ -481,7 +487,7 @@ int main() {
 
     //uint16_t result;
     //uint16_t carry_1;
-    //carry_1=encoded_naive_mul(num(a),num(a),0,result);
+    //carry_1=encoded_naive_mul(num(a),num(a),(uint16_t)9,result);
     //cout<<"decode result: "<<display_cell(result)<<'\n';
     //cout<<"decode carry: "<<display_cell(carry_1)<<'\n';
     //cout<<getCarry_2(r)<<'\n';
