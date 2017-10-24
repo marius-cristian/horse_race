@@ -79,7 +79,7 @@ for (int i=0;i<120000;i+=1000){
 //  // check the answers; how?
 //#endif
   
-  double t = double(repetitions) * double(i);  
+  double t = double(repetitions) * double(N);  
   double ns = 1000000000.0 * double(stop - start) / double(CLOCKS_PER_SEC);
   std::cout.precision(4);
   std::cout << i << '\t' << ns / t << std::endl;
