@@ -131,7 +131,7 @@ To overcome this problem, we chose to encode our one base 10 digit on a nibble; 
 \url{https://en.wikipedia.org/wiki/Booth%27s_multiplication_algorithm}\\
 By using this encoding our result can be around 260000 digits (32.5 times larger input than the initial phase); but everything that exceeds will just be ignored; Not entirerly satisfactory as we expected to do milion digit multiplication and see the turning points in performance. Further tuning can be made; as on 8 bits we store values up to 99 instead of 256.\\
 A second tought: instead of having cell size of $uint16\_t$ we can use $long\ long$, will this result in an improvment on the amount of difits we can use?\\
-A third tought (as suggested by Lennon): why not have a lookup table for cell multiplication values, and do it in O(1); this table will take up memory space, it might make it faster for instances up to a number of digits, but the trade off will be in the length of the result.\\
+A third tought (as suggested by a peer): why not have a lookup table for cell multiplication values, and do it in O(1); this table will take up memory space, it might make it faster for instances up to a number of digits, but the trade off will be in the length of the result.\\
 A forth tought: $x^{z}$ is computed much faster than $x_1x_2...x_z$ (exponentiation by squaring); having a lookup table to break the cell in power of primes, will this yeld in better performance? \\
 \url{https://www.rookieslab.com/posts/fast-power-algorithm-exponentiation-by-squaring-cpp-python-implementation}
 
@@ -139,15 +139,9 @@ A forth tought: $x^{z}$ is computed much faster than $x_1x_2...x_z$ (exponentiat
 \newpage
 \addvspace{\bigskipamount}
 \section*{Experiments}
-\subsection*{System}
-
-\subsubsection*{Machine 1}
-\lstinputlisting[caption=TODO,label=dmi_proc_m1,language=,]{listings/dmidecode_processor}
-\lstinputlisting[caption=TODO,label=dmi_proc_m1,language=,]{listings/machine1_uname}
-%\textbf{Machine 1:}\\
-
-\textbf{Machine 2:}
-
+\subsection*{System Info}
+\lstinputlisting[caption=Machine 1,label=dmi_proc_m1,language=,]{listings/dmidecode_processor}
+\lstinputlisting[caption=Machine 2,label=dmi_proc_m1,language=,]{listings/dmidecode_processor}
 
 \subsection*{Instances}
 \subsection*{Design}
