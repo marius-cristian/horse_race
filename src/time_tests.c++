@@ -63,7 +63,7 @@ int main(int argc, char** argv) {
 string a;
 string b;
 
-for (int i=0;i<120000;i+=1000){
+for (int i=0;i<120000;i+=5000){
   a=generate(i);
   b=generate(i);
 
