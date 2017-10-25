@@ -404,7 +404,7 @@ vector<uint16_t> mul_1(vector<uint16_t> a, vector<uint16_t> b){
     long j;
     long n=a.size();
     long m=b.size();
-    cout<<"size a: "<<n<<" size b: "<< m<<'\n';
+    //cout<<"size a: "<<n<<" size b: "<< m<<'\n';
     vector<uint16_t> result;
     uint16_t carry;
     uint16_t inter_res;
@@ -422,7 +422,7 @@ vector<uint16_t> mul_1(vector<uint16_t> a, vector<uint16_t> b){
                 //cout<<"we are pushing back 1"<<'\n';
                 carry_aux=carry;
                 carry=encoded_naive_mul(a[i],b[j],carry,inter_res);
-                (j==m-1)?cout<<display_cell(carry)<<" ;; "<<display_cell(inter_res)<<" ^^ "<<'\n':cout<<"-";
+                //(j==m-1)?cout<<display_cell(carry)<<" ;; "<<display_cell(inter_res)<<" ^^ "<<'\n':cout<<"-";
                 add_carry=cell_add(inter_res,carry_aux,add_carry,inter_res);
                 result.push_back(inter_res);    
             }

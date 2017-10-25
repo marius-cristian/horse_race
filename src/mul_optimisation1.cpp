@@ -374,7 +374,6 @@ bool cell_substract(uint16_t a, uint16_t b, bool prev_carry, uint16_t &res){
 vector<uint16_t> inputToVector(string a){
     int n=a.length();
     int aux=n&3; //%4 operator
-    cout<<"inputto vector size: "<<a.length()<<'\n';
     string first;
     int i;
     switch (aux){
@@ -408,12 +407,10 @@ vector<uint16_t> mul_1(vector<uint16_t> a, vector<uint16_t> b){
     long j;
     long n=a.size();
     long m=b.size();
-    cout<<"size a: "<<n<<" size b: "<< m<<'\n';
     vector<uint16_t> result;
     uint16_t carry;
     uint16_t inter_res;
     vector<uint16_t> final_res;
-    long pos=0;
     bool create=true;
     bool add_carry=false;
     uint16_t carry_aux;
@@ -423,15 +420,15 @@ vector<uint16_t> mul_1(vector<uint16_t> a, vector<uint16_t> b){
         add_carry=false;        
         for(j=(m-1);j>=0;j--){
             if(i==(n-1)){
-                cout<<"we are pushing back 1"<<'\n';
+                //cout<<"we are pushing back 1"<<'\n';
                 carry_aux=carry;
                 carry=encoded_naive_mul(a[i],b[j],carry,inter_res);
-                (j==m-1)?cout<<display_cell(carry)<<" ;; "<<display_cell(inter_res)<<" ^^ "<<'\n':cout<<"-";
+                //(j==m-1)?cout<<display_cell(carry)<<" ;; "<<display_cell(inter_res)<<" ^^ "<<'\n':cout<<"-";
                 add_carry=cell_add(inter_res,carry_aux,add_carry,inter_res);
                 result.push_back(inter_res);    
             }
             else if(j==0){
-                cout<<"we are pushing back 2"<<'\n';
+                //cout<<"we are pushing back 2"<<'\n';
                 carry_aux=carry;
                 carry=encoded_naive_mul(a[i],b[j],carry,inter_res);
                 add_carry=cell_add(inter_res,carry_aux,add_carry,inter_res);
@@ -439,7 +436,7 @@ vector<uint16_t> mul_1(vector<uint16_t> a, vector<uint16_t> b){
                 result.push_back(carry);    
             }
             else{ //{if(j>0){
-                cout<<"we are pushing back 3"<<'\n';
+                //cout<<"we are pushing back 3"<<'\n';
                 carry=encoded_naive_mul(a[i],b[j],carry,inter_res);
                 add_carry=cell_add(result.at(m-i-1+j-1),inter_res,add_carry,inter_res);
                 result.at(m-i-1+j-1)=inter_res;
@@ -483,7 +480,6 @@ int main() {
 
     vector<uint16_t>n1= inputToVector(a);
     vector<uint16_t>n2= inputToVector(b);
-    cout<<"n1 size: "<<n1.size()<<" n2 size: "<<n2.size()<<'\n';
     vector<uint16_t>r=mul_1(n1,n2);
     cout<<"vector decode: "<<vector_decode(r)<<'\n';
     //cout<<"string to number: "<<num(a)<<'\n';
