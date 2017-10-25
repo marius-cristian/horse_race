@@ -14,12 +14,11 @@
     EDIT 3: reduce data structure in memory
             going to store 2 digits at a time;
             uint8_t; and carry in another uint8_t;
-
+            actually 4 at a time; uint16_t
     -funsigned-char        
 
 */
 
-#include "fft.h++"
 #include <vector> //std::vector
 #include <iostream>
 #include <string> //std:stoi
@@ -404,12 +403,10 @@ vector<uint16_t> mul_1(vector<uint16_t> a, vector<uint16_t> b){
     long j;
     long n=a.size();
     long m=b.size();
-    //cout<<"size a: "<<n<<" size b: "<< m<<'\n';
     vector<uint16_t> result;
     uint16_t carry;
     uint16_t inter_res;
     vector<uint16_t> final_res;
-    long pos=0;
     bool create=true;
     bool add_carry=false;
     uint16_t carry_aux;
@@ -421,10 +418,14 @@ vector<uint16_t> mul_1(vector<uint16_t> a, vector<uint16_t> b){
             if(i==(n-1)){
                 //cout<<"we are pushing back 1"<<'\n';
                 carry_aux=carry;
+
                 carry=encoded_naive_mul(a[i],b[j],carry,inter_res);
                 //(j==m-1)?cout<<display_cell(carry)<<" ;; "<<display_cell(inter_res)<<" ^^ "<<'\n':cout<<"-";
                 add_carry=cell_add(inter_res,carry_aux,add_carry,inter_res);
-                result.push_back(inter_res);    
+                result.push_back(inter_res);
+                if(j==0){
+                    result.push_back(carry);   
+                }
             }
             else if(j==0){
                 //cout<<"we are pushing back 2"<<'\n';
@@ -437,8 +438,8 @@ vector<uint16_t> mul_1(vector<uint16_t> a, vector<uint16_t> b){
             else{ //{if(j>0){
                 //cout<<"we are pushing back 3"<<'\n';
                 carry=encoded_naive_mul(a[i],b[j],carry,inter_res);
-                add_carry=cell_add(result.at(m-i-1+j-1),inter_res,add_carry,inter_res);
-                result.at(m-i-1+j-1)=inter_res;
+                add_carry=cell_add(result.at(n-i-1+m-j-1),inter_res,add_carry,inter_res);
+                result.at(n-i-1+m-j-1)=inter_res;
             }
 
             //if((j>i && i!=0 && j!=(m-1)) || i!=(n-1)){
@@ -451,7 +452,7 @@ vector<uint16_t> mul_1(vector<uint16_t> a, vector<uint16_t> b){
             //}
         }
     }
-    return result;   
+    return result;
 }
 
 string vector_decode(vector<uint16_t> r){
