@@ -368,7 +368,9 @@ bool cell_substract(uint16_t a, uint16_t b, bool prev_carry, uint16_t &res){
 
 
 vector<uint16_t> inputToVector(string a){
-    int aux=a.length()&3; //%4 operator
+    int n=a.length();
+    int aux=n&3; //%4 operator
+    //cout<<"inputto vector size: "<<a.length()<<'\n';
     string first;
     int i;
     switch (aux){
@@ -386,8 +388,8 @@ vector<uint16_t> inputToVector(string a){
                 break;
         default: break;
     }
-    //cout<<"first debug: "<<first<<'\n';
-    int n=a.length()>>2;//division by 4, is shift by the power of 2^2;
+
+    //int n=a.length()>>2;//division by 4, is shift by the power of 2^2;
     vector<uint16_t> result;
     result.push_back(num(first));
     for(;i<n;i+=4){
@@ -398,16 +400,55 @@ vector<uint16_t> inputToVector(string a){
 }
 
 vector<uint16_t> mul_1(vector<uint16_t> a, vector<uint16_t> b){
-    unsigned long i;
-    unsigned long j;
+    long i;
+    long j;
+    long n=a.size();
+    long m=b.size();
+    cout<<"size a: "<<n<<" size b: "<< m<<'\n';
     vector<uint16_t> result;
     uint16_t carry;
     uint16_t inter_res;
-    for(i=0;i<a.size();i++){
+    vector<uint16_t> final_res;
+    long pos=0;
+    bool create=true;
+    bool add_carry=false;
+    uint16_t carry_aux;
+    int k=0;
+    for(i=(n-1);i>=0;i--){
         carry=0;
-        for(j=0;j<b.size();j++){
-            carry=encoded_naive_mul(a[i],b[j],carry,inter_res);
-            result.push_back(inter_res);
+        add_carry=false;        
+        for(j=(m-1);j>=0;j--){
+            if(i==(n-1)){
+                //cout<<"we are pushing back 1"<<'\n';
+                carry_aux=carry;
+                carry=encoded_naive_mul(a[i],b[j],carry,inter_res);
+                (j==m-1)?cout<<display_cell(carry)<<" ;; "<<display_cell(inter_res)<<" ^^ "<<'\n':cout<<"-";
+                add_carry=cell_add(inter_res,carry_aux,add_carry,inter_res);
+                result.push_back(inter_res);    
+            }
+            else if(j==0){
+                //cout<<"we are pushing back 2"<<'\n';
+                carry_aux=carry;
+                carry=encoded_naive_mul(a[i],b[j],carry,inter_res);
+                add_carry=cell_add(inter_res,carry_aux,add_carry,inter_res);
+                result.push_back(inter_res);
+                result.push_back(carry);    
+            }
+            else{ //{if(j>0){
+                //cout<<"we are pushing back 3"<<'\n';
+                carry=encoded_naive_mul(a[i],b[j],carry,inter_res);
+                add_carry=cell_add(result.at(m-i-1+j-1),inter_res,add_carry,inter_res);
+                result.at(m-i-1+j-1)=inter_res;
+            }
+
+            //if((j>i && i!=0 && j!=(m-1)) || i!=(n-1)){
+            //    cout<<k<<'\n';
+            //    cout<<"explain logic here"<<'\n';
+            //    add_carry=cell_add(result[i+j],inter_res,add_carry,inter_res);
+            //    result.at(n-i-1+m-j-1)=inter_res;
+            //    //result.erase((i+j));
+            //    //result.insert((i+j),inter_res);
+            //}
         }
     }
     return result;   
