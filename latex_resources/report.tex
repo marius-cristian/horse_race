@@ -95,11 +95,11 @@ Universitetsparken 5, 2100 Copenhagen East, Denmark\\
 \maketitle
 
 \begin{abstract}
-This report contains the implementation and benchmarks for multiplication (naive, karatsuba, strassen, furer) based on c++ metaprogramming template provided in cphstl/integer.h++ 
+This progress report contains the implementation and benchmarks for different multiplication algorithms (naive, karatsuba, strassen, furer).   
 \end{abstract}
 
 \begin{keywords}
-Multiplication, naive, Karatsuba, Sch\"onhage-Strassen, F\"urer, large integers, 4000 digits, Fast-Fourier Transform
+Multiplication, naive, Karatsuba, Sch\"onhage-Strassen, F\"urer, large integers, arbitrarly large digits, Fast-Fourier Transform
 \end{keywords}
 
 \dates{ 2017, October 2017.}
@@ -114,16 +114,35 @@ Multiplication, naive, Karatsuba, Sch\"onhage-Strassen, F\"urer, large integers,
 \newpage
 \addvspace{\bigskipamount}
 \section*{Introduction}
+\subsection*{Motivation}
+
 \subsection*{Goals}
+The Goals of this project are to benchmark 
 \vspace*{\fill}
 \newpage
 \addvspace{\bigskipamount}
 \section*{Approach}
+In our initial approach, we tried to work with the metaprogramming template provided by Jyrki, but we failed to cast data types from $Z<n>$ to $Z<m>$;\\
+Therfore we had a change of dirrection and switched to an approach more python like: the inputs are treated as strings thus we can read around bilion digit numbers;\\
+The first problem we encountered was efficiently storing the result in memory; we initially chose a $std::vector<int>$ to build our result, where one cell represents one digit. The major drawback is obvious as one digit can have values from 0 to 9; thus occupying at most 4 bits. Thus our results were capped at around 8000 digits output before running out of memory.\\
+To overcome this problem, we chose to encode our one base 10 digit on a nibble; and to store 2 digits on an unsigned char. The problem is that $char$ data type does not support multiplication. Thus we used $uint16\_t$ data structure to store 4 digits (4 nibbles). The drawback of this approach is, that on 4 bits we can represent values up to 15, and we only represent up to 9.\\
+\url{https://en.wikipedia.org/wiki/Double_dabble}\\
+\url{https://en.wikipedia.org/wiki/Multiplication_algorithm#Shift_and_add}\\
+\url{https://en.wikipedia.org/wiki/Booth%27s_multiplication_algorithm}\\
+By using this encoding our result can be around 260000 digits (32.5 times larger input than the initial phase); but everything that exceeds will just be ignored; Not entirerly satisfactory as we expected to do milion digit multiplication and see the turning points in performance. Further tuning can be made; as on 8 bits we store values up to 99 instead of 256.\\
+A second tought: instead of having cell size of $uint16\_t$ we can use $long\ long$, will this result in an improvment on the amount of difits we can use?\\
+A third tought (as suggested by a peer): why not have a lookup table for cell multiplication values, and do it in O(1); this table will take up memory space, it might make it faster for instances up to a number of digits, but the trade off will be in the length of the result.\\
+A forth tought: $x^{z}$ is computed much faster than $x_1x_2...x_z$ (exponentiation by squaring); having a lookup table to break the cell in power of primes, will this yeld in better performance? \\
+\url{https://www.rookieslab.com/posts/fast-power-algorithm-exponentiation-by-squaring-cpp-python-implementation}
+
 \vspace*{\fill}
 \newpage
 \addvspace{\bigskipamount}
 \section*{Experiments}
-\subsection*{System}
+\subsection*{System Info}
+\lstinputlisting[caption=Machine 1,label=dmi_proc_m1,language=,]{listings/dmidecode_processor}
+\lstinputlisting[caption=Machine 2,label=dmi_proc_m1,language=,]{listings/dmidecode_processor}
+
 \subsection*{Instances}
 \subsection*{Design}
 \subsection*{Measures}
@@ -133,4 +152,10 @@ Multiplication, naive, Karatsuba, Sch\"onhage-Strassen, F\"urer, large integers,
 \addvspace{\bigskipamount}
 \section*{Conclusions}
 
+%
+%\begin{bibliography}{1}
+
+%\bibitem{recent} FAST INTEGER MULTIPLICATION USING GENERALIZED FERMAT PRIMES - SVYATOSLAV COVANOV AND EMMANUEL THOMÉ \url{https://arxiv.org/pdf/1502.02800.pdf}
+
+%\end{bibliography}
 \end{document}
