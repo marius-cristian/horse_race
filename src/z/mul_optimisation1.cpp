@@ -430,7 +430,7 @@ vector<uint16_t> mul_1(vector<uint16_t> a, vector<uint16_t> b){
                 //(j==m-1)?cout<<display_cell(carry)<<" ;; "<<display_cell(inter_res)<<" ^^ "<<'\n':cout<<"-";
                 add_carry=cell_add(inter_res,carry_aux,add_carry,inter_res);
                 result.push_back(inter_res);    
-                tc = 
+                //tc = 
                 if(j==0){
                     result.push_back(carry);
                 }
