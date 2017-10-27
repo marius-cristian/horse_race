@@ -344,18 +344,18 @@ string multiply_big(string x, string y) {
 
 // C++ example (uses cout...)
 // (this code works in straight C too though if you use a different main function)
-int main() {
-	// two numbers
-	//long long a = 2406994;
-	//long long b = 2328563;
-	//cout << multiply(a,b) << endl;
-
-	string a;
-	string b;
-
-	cin>>a>>b;
-
-	cout<<"----\n"<<multiply_big(a,b)<<"\n";
-
-	return 0;
-}
+//int main() {
+//	// two numbers
+//	//long long a = 2406994;
+//	//long long b = 2328563;
+//	//cout << multiply(a,b) << endl;
+//
+//	string a;
+//	string b;
+//
+//	cin>>a>>b;
+//
+//	cout<<"----\n"<<multiply_big(a,b)<<"\n";
+//
+//	return 0;
+//}

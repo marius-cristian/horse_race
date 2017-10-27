@@ -498,40 +498,40 @@ string vector_decode(vector<uint16_t> r){
 }
 
 
-int main() {
-    //string a,b;
-    //cin>>a>>b;
-    //printhuge(mult(a,b));
-    //return 0;
-    string a,b;
-    cin>>a>>b;
-    //uint16_t r;
-    //uint16_t c=encoded_naive_mul(num(a),num(b),0,r);
-    //cout<<"resut: "<<display_cell(r)<<'\n';
-    //cout<<"carry: "<<display_cell(c)<<'\n';
-
-    vector<uint16_t>n1= inputToVector(a);
-    vector<uint16_t>n2= inputToVector(b);
-    vector<uint16_t>r=mul_1(n1,n2);
-    cout<<"vector decode: "<<vector_decode(r)<<'\n';
-    //cout<<"string to number: "<<num(a)<<'\n';
-    //cout<<"number to string: "<<display_cell(num(a))<<'\n';
-    //uint16_t r=carry(num(a),num(a));
-    //cout<<display_cell(r)<<'\n';
-
-    //uint16_t result;
-    //uint16_t carry_1;
-    //carry_1=encoded_naive_mul(num(a),num(a),(uint16_t)9,result);
-    //cout<<"decode result: "<<display_cell(result)<<'\n';
-    //cout<<"decode carry: "<<display_cell(carry_1)<<'\n';
-    //cout<<getCarry_2(r)<<'\n';
-    ////cout<<r+getCarry_2(r)<<'\n';
+//int main() {
+//    //string a,b;
+//    //cin>>a>>b;
+//    //printhuge(mult(a,b));
+//    //return 0;
+//    string a,b;
+//    cin>>a>>b;
+//    //uint16_t r;
+//    //uint16_t c=encoded_naive_mul(num(a),num(b),0,r);
+//    //cout<<"resut: "<<display_cell(r)<<'\n';
+//    //cout<<"carry: "<<display_cell(c)<<'\n';
 //
+//    vector<uint16_t>n1= inputToVector(a);
+//    vector<uint16_t>n2= inputToVector(b);
+//    vector<uint16_t>r=mul_1(n1,n2);
+//    cout<<"vector decode: "<<vector_decode(r)<<'\n';
+//    //cout<<"string to number: "<<num(a)<<'\n';
+//    //cout<<"number to string: "<<display_cell(num(a))<<'\n';
+//    //uint16_t r=carry(num(a),num(a));
+//    //cout<<display_cell(r)<<'\n';
 //
-//    //cout<<"big or little endian? "<<'\n';
-//    //unsigned int x = 1;
-//    //int result=(int) (((char *)&x)[0]);
-    //cout<<result<<'\n' ;
-
-    return 0;
-}
+//    //uint16_t result;
+//    //uint16_t carry_1;
+//    //carry_1=encoded_naive_mul(num(a),num(a),(uint16_t)9,result);
+//    //cout<<"decode result: "<<display_cell(result)<<'\n';
+//    //cout<<"decode carry: "<<display_cell(carry_1)<<'\n';
+//    //cout<<getCarry_2(r)<<'\n';
+//    ////cout<<r+getCarry_2(r)<<'\n';
+////
+////
+////    //cout<<"big or little endian? "<<'\n';
+////    //unsigned int x = 1;
+////    //int result=(int) (((char *)&x)[0]);
+//    //cout<<result<<'\n' ;
+//
+//    return 0;
+//}
