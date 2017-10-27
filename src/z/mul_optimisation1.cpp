@@ -1,6 +1,6 @@
 /*
-	Multiplication template and implementations	
-	
+    Multiplication template and implementations 
+    
     based on this: https://gist.github.com/jargnar/3263916
 
     EDIT 1: no more segmentation faults;
@@ -320,7 +320,7 @@ bool negative_check(uint16_t &a, uint16_t b, bool carry){
 //returns carry 1 or 0
 
 //returns carry 1 or 0, result is parameter;
-bool cell_add(uint16_t a, uint16_t b, bool prev_carry, uint16_t &res){
+bool cell_add(uint16_t a, uint16_t b, uint16_t prev_carry, uint16_t &res){
     res&=0;
     uint16_t c1;
     uint16_t a3=(a>>12);//first nibbles   somehow a dispaly correctly;
@@ -333,8 +333,8 @@ bool cell_add(uint16_t a, uint16_t b, bool prev_carry, uint16_t &res){
     uint16_t b1=(b&240)>>4;
     uint16_t b0=(b&15);//4th nibble;      somehow b has an extra char at the end sometimes
 
-
-    a0+= (b0 + (uint16_t)(prev_carry? 1 : 0));
+    
+    a0+= b0 + prev_carry;
     c1=digit_check(a0);
     a1+=(b1+c1);
     c1=digit_check(a1);
@@ -411,31 +411,30 @@ vector<uint16_t> mul_1(vector<uint16_t> a, vector<uint16_t> b){
     uint16_t inter_res;
     vector<uint16_t> final_res;
     bool create=true;
-    bool add_carry=false;
-    bool add_carry_aux=false;
+    uint16_t add_carry=0;
+    uint16_t add_carry_aux=0;
     uint16_t carry_aux;
     int k=0;
-    for(i=0;i<n;i++){
-        cout<<a[i];
-    }
     for(i=(n-1);i>=0;i--){
         carry=0;
-        add_carry=false;    
-        add_carry_aux=false;    
+        add_carry=0;    
+        add_carry_aux=0;    
         for(j=(m-1);j>=0;j--){
+            //cout<<"\ni,j"<<i<<" "<<a[i]<<" "<<j<<" "<<b[j];
             if(i==(n-1)){
                 //cout<<"we are pushing back 1"<<'\n';
+
                 carry_aux=carry;
                 carry=encoded_naive_mul(a[i],b[j],carry_aux,inter_res);
                 //(j==m-1)?cout<<display_cell(carry)<<" ;; "<<display_cell(inter_res)<<" ^^ "<<'\n':cout<<"-";
                 add_carry=cell_add(inter_res,carry_aux,add_carry,inter_res);
                 result.push_back(inter_res);    
-                tc = 
+                //tc = 
                 if(j==0){
                     result.push_back(carry);
                 }
             }
-            else if(j==0){
+            /*else if(j==0){
                 //cout<<"we are pushing back 2"<<'\n';
                 carry_aux=carry;
                 carry=encoded_naive_mul(a[i],b[j],carry,inter_res);
@@ -445,7 +444,7 @@ vector<uint16_t> mul_1(vector<uint16_t> a, vector<uint16_t> b){
                 }
                 result.push_back(inter_res);
                 result.push_back(carry);    
-            }
+            }*/
             else{ //{if(j>0){
                 //cout<<"we are pushing back 3"<<'\n';
                 //carry=encoded_naive_mul(a[i],b[j],carry,inter_res);
@@ -455,11 +454,25 @@ vector<uint16_t> mul_1(vector<uint16_t> a, vector<uint16_t> b){
                 add_carry_aux=add_carry;
                 carry=encoded_naive_mul(a[i],b[j],carry,inter_res);
                 add_carry_aux=cell_add(carry_aux,inter_res,add_carry_aux,inter_res);
-                add_carry=cell_add(result.at(m-i-1+j-1),inter_res,false,inter_res);
-                if(add_carry==false){
-                    add_carry=add_carry_aux;
+                add_carry=cell_add(result.at(m-i-1+n-j-1),inter_res,0,inter_res);
+                
+                add_carry+=add_carry_aux;
+                
+                
+                result.at(m-i-1+n-j-1)=inter_res;
+                if(j==0){
+                    //cout<< "\n result before adding final carry: ";
+                    //for (int i = 0; i < (int)result.size(); i++)
+                    //cout<<result.at(i) <<",";
+                    result.push_back(carry);
+                    //cout<<"carry "<<carry;
+                    inter_res=result.at(m-i-1+n-j);
+                    add_carry=cell_add(add_carry,inter_res,0,inter_res);   
+                    result.at(m-i-1+n-j)=inter_res; 
                 }
-                result.at(m-i-1+j-1)=inter_res;
+                //cout<< "\n result : ";
+                //for (int i = 0; i < (int)result.size(); i++)
+                //cout<<result.at(i) <<",";
             }
 
             //if((j>i && i!=0 && j!=(m-1)) || i!=(n-1)){
@@ -496,7 +509,6 @@ int main() {
     //uint16_t c=encoded_naive_mul(num(a),num(b),0,r);
     //cout<<"resut: "<<display_cell(r)<<'\n';
     //cout<<"carry: "<<display_cell(c)<<'\n';
-
 
     vector<uint16_t>n1= inputToVector(a);
     vector<uint16_t>n2= inputToVector(b);
