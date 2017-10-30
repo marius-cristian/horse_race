@@ -1,3 +1,7 @@
 ./latex_resources/.report.tex.swp
+
 ./src/fftex
 ./src/bigint
+
+./src/integer.h++
+
